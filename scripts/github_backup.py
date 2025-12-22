@@ -308,7 +308,7 @@ def main() -> int:
         print("3. Keine Berechtigung für das Repository", file=sys.stderr)
         return 6
     
-    print("✅ Backup erfolgreich abgeschlossen!")
+    print("[OK] Backup erfolgreich abgeschlossen!")
     print(f"Commit: {commit_hash}")
     return 0
 
