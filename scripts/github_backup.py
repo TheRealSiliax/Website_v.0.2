@@ -195,15 +195,23 @@ def create_commit(project_root: Path, message: Optional[str] = None) -> Optional
 
 def push_to_github(project_root: Path, branch: str = 'main') -> bool:
     """Pusht Änderungen zu GitHub."""
+    current_branch_result = subprocess.run(
+        ['git', 'branch', '--show-current'],
+        cwd=project_root,
+        capture_output=True,
+        text=True
+    )
+    actual_branch = current_branch_result.stdout.strip() if current_branch_result.returncode == 0 else branch
+    
     try:
         result = subprocess.run(
-            ['git', 'push', '-u', 'origin', branch],
+            ['git', 'push', '-u', 'origin', actual_branch],
             cwd=project_root,
             check=True,
             capture_output=True,
             text=True
         )
-        print(f"Erfolgreich zu GitHub gepusht (Branch: {branch})")
+        print(f"Erfolgreich zu GitHub gepusht (Branch: {actual_branch})")
         return True
     except subprocess.CalledProcessError as error:
         print(f"Fehler beim Pushen zu GitHub: {error}", file=sys.stderr)
@@ -249,6 +257,25 @@ def main() -> int:
             return 2
         configure_git_user(project_root, config)
     
+    current_branch_result = subprocess.run(
+        ['git', 'branch', '--show-current'],
+        cwd=project_root,
+        capture_output=True,
+        text=True
+    )
+    current_branch = current_branch_result.stdout.strip() if current_branch_result.returncode == 0 else 'master'
+    
+    if current_branch == 'master' and config.get('default_branch') == 'main':
+        print("Benenne Branch 'master' zu 'main' um...")
+        subprocess.run(
+            ['git', 'branch', '-M', 'main'],
+            cwd=project_root,
+            check=True,
+            capture_output=True,
+            text=True
+        )
+        current_branch = 'main'
+    
     if not check_remote_configured(project_root):
         print("Remote-Repository nicht konfiguriert. Konfiguriere...")
         if not configure_remote(project_root, config):
@@ -271,9 +298,14 @@ def main() -> int:
     if not commit_hash:
         return 5
     
-    if not push_to_github(project_root):
+    default_branch = config.get('default_branch', 'main')
+    if not push_to_github(project_root, default_branch):
         print("Warnung: Commit erstellt, aber Push fehlgeschlagen.", file=sys.stderr)
-        print("Bitte manuell pushen mit: git push -u origin main", file=sys.stderr)
+        print(f"Bitte manuell pushen mit: git push -u origin {default_branch}", file=sys.stderr)
+        print("\nMögliche Ursachen:", file=sys.stderr)
+        print("1. SSH-Authentifizierung nicht eingerichtet - siehe SSH_SETUP_ANLEITUNG.md", file=sys.stderr)
+        print("2. Repository existiert nicht auf GitHub", file=sys.stderr)
+        print("3. Keine Berechtigung für das Repository", file=sys.stderr)
         return 6
     
     print("✅ Backup erfolgreich abgeschlossen!")
