@@ -106,27 +106,50 @@
         }
 
         /* ========================================
-           GRASS BACKGROUND CANVAS
-           WebGL Wiesen-Hintergrund mit Interaktion
+           VIDEO BACKGROUND
+           Live Wallpaper - Wellendes Gras
            ======================================== */
-        #grassCanvas {
+        .video-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
+            overflow: hidden;
             pointer-events: none;
         }
 
-        /* Fallback für CSS wenn WebGL nicht verfügbar */
-        .grass-fallback {
-            position: fixed;
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        /* Optionaler sanfter Overlay für bessere Lesbarkeit */
+        .video-background::after {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            background: linear-gradient(180deg,
+                rgba(247, 245, 240, 0.15) 0%,
+                rgba(247, 245, 240, 0.05) 30%,
+                rgba(247, 245, 240, 0.1) 70%,
+                rgba(247, 245, 240, 0.2) 100%);
+            pointer-events: none;
+        }
+
+        /* Fallback falls Video nicht lädt */
+        .video-background--fallback {
             background: linear-gradient(180deg, 
                 #e3f0f7 0%, 
                 #b8d4e3 25%,
@@ -955,8 +978,12 @@
     </style>
 </head>
 <body>
-    <!-- WebGL Grass Background Canvas -->
-    <canvas id="grassCanvas" aria-hidden="true"></canvas>
+    <!-- Video Background - Live Wallpaper -->
+    <div class="video-background" id="videoBackground">
+        <video autoplay muted loop playsinline id="bgVideo">
+            <source src="assets/videos/wavy-grass.mp4" type="video/mp4">
+        </video>
+    </div>
 
     <!-- Header -->
     <header class="header" id="header">
@@ -1018,7 +1045,7 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
                     </svg>
-                    Bewege die Maus um das Gras sanft zu bewegen
+                    Genieße die beruhigende Atmosphäre der Wiese
                 </p>
                 <a href="#contact" class="btn btn--nature">Jetzt entdecken</a>
             </div>
@@ -1172,416 +1199,49 @@
     </div>
 
     <!-- ========================================
-         WEBGL GRASS BACKGROUND SHADER
-         Biophiles Design mit interaktivem Gras
-         - Minimalistisches Wiesen-Design
-         - Gras bewegt sich bei Mausbewegung
-         - Basiert auf Attention Restoration Theory
+         VIDEO BACKGROUND HANDLER
+         Live Wallpaper mit Fallback
          ======================================== -->
     <script>
     (function() {
         'use strict';
 
-        // ========================================
-        // VERTEX SHADER
-        // ========================================
-        const VERTEX_SHADER = `
-            attribute vec2 a_position;
-            void main() {
-                gl_Position = vec4(a_position, 0.0, 1.0);
-            }
-        `;
-
-        // ========================================
-        // FRAGMENT SHADER - Minimalistische Wiese
-        // ========================================
-        const FRAGMENT_SHADER = `
-            #ifdef GL_ES
-            precision highp float;
-            #endif
-
-            uniform vec2 u_resolution;
-            uniform float u_time;
-            uniform vec2 u_pointer;
-            uniform float u_pointerInfluence;
-
-            // === BIOPHILE FARBPALETTE ===
-            // Himmel (sanft, nicht ablenkend)
-            const vec3 SKY_TOP = vec3(0.89, 0.94, 0.97);      // #e3f0f7
-            const vec3 SKY_MID = vec3(0.72, 0.83, 0.89);      // #b8d4e3
-            const vec3 SKY_HORIZON = vec3(0.82, 0.88, 0.82);  // Sanfter Übergang
-            
-            // Gras (Salbeigr\u00fcn, beruhigend)
-            const vec3 GRASS_LIGHT = vec3(0.66, 0.78, 0.53);  // #a8c686
-            const vec3 GRASS_MID = vec3(0.49, 0.71, 0.42);    // #7db46c
-            const vec3 GRASS_DARK = vec3(0.35, 0.60, 0.29);   // #5a9a4a
-            const vec3 GRASS_SAGE = vec3(0.53, 0.66, 0.47);   // #87a878
-            
-            // Erde/Boden
-            const vec3 EARTH = vec3(0.55, 0.44, 0.28);        // Erdton
-
-            // === CONSTANTS ===
-            const float PI = 3.14159265359;
-            const float HORIZON_LINE = 0.35;
-
-            // === NOISE FUNCTIONS ===
-            
-            float hash(vec2 p) {
-                vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-                p3 += dot(p3, p3.yzx + 33.33);
-                return fract((p3.x + p3.y) * p3.z);
-            }
-            
-            float noise(vec2 p) {
-                vec2 i = floor(p);
-                vec2 f = fract(p);
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                
-                float a = hash(i);
-                float b = hash(i + vec2(1.0, 0.0));
-                float c = hash(i + vec2(0.0, 1.0));
-                float d = hash(i + vec2(1.0, 1.0));
-                
-                return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
-            }
-            
-            // FBM f\u00fcr organische Muster
-            float fbm(vec2 p, int octaves) {
-                float value = 0.0;
-                float amplitude = 0.5;
-                float frequency = 1.0;
-                
-                for (int i = 0; i < 5; i++) {
-                    if (i >= octaves) break;
-                    value += amplitude * noise(p * frequency);
-                    frequency *= 2.0;
-                    amplitude *= 0.5;
-                }
-                
-                return value;
-            }
-
-            // === GRASS BLADE FUNCTION ===
-            // Einzelner Grashalm mit Wind-Animation
-            float grassBlade(vec2 uv, vec2 basePos, float height, float width, float bend, float phase) {
-                // Position relativ zur Basis
-                vec2 pos = uv - basePos;
-                
-                // Nur nach oben zeichnen
-                if (pos.y < 0.0 || pos.y > height) return 0.0;
-                
-                // Normalisierte H\u00f6he (0 = Basis, 1 = Spitze)
-                float t = pos.y / height;
-                
-                // Biegung des Halms (st\u00e4rker an der Spitze)
-                float bendOffset = bend * t * t;
-                
-                // Breite nimmt nach oben ab
-                float bladeWidth = width * (1.0 - t * 0.7);
-                
-                // Distanz zum Halm-Zentrum
-                float dist = abs(pos.x - bendOffset);
-                
-                // Weicher Rand
-                return smoothstep(bladeWidth, bladeWidth * 0.3, dist);
-            }
-
-            // === GRASS FIELD ===
-            vec3 renderGrass(vec2 uv, float time, vec2 pointer, float pointerDist) {
-                vec3 color = vec3(0.0);
-                float grassMask = 0.0;
-                
-                // Basis-Grasboden
-                float groundNoise = fbm(uv * 8.0, 3);
-                vec3 groundColor = mix(GRASS_DARK, GRASS_MID, groundNoise);
-                
-                // Mehrere Schichten Gras f\u00fcr Tiefe
-                for (float layer = 0.0; layer < 3.0; layer++) {
-                    float layerDepth = layer / 3.0;
-                    float layerScale = 15.0 + layer * 10.0;
-                    
-                    // Grashalm-Positionen (pseudo-zuf\u00e4llig verteilt)
-                    for (float i = 0.0; i < 8.0; i++) {
-                        float xOffset = hash(vec2(i, layer)) * 0.15;
-                        float yBase = 0.0;
-                        
-                        // Tile das Gras horizontal
-                        float tileX = fract(uv.x * layerScale + xOffset);
-                        vec2 basePos = vec2(tileX, yBase);
-                        
-                        // Variation in H\u00f6he und Breite
-                        float heightVar = 0.08 + hash(vec2(i + layer * 10.0, 0.0)) * 0.12;
-                        float widthVar = 0.008 + hash(vec2(i, layer + 5.0)) * 0.006;
-                        
-                        // Wind-Animation
-                        float windPhase = hash(vec2(i, layer)) * PI * 2.0;
-                        float windSpeed = 0.8 + hash(vec2(i + 1.0, layer)) * 0.4;
-                        float wind = sin(time * windSpeed + uv.x * 5.0 + windPhase) * 0.02;
-                        
-                        // Maus-Interaktion: Gras bewegt sich weg
-                        float mouseEffect = 0.0;
-                        float effectRadius = 0.25;
-                        vec2 bladeWorldPos = vec2(uv.x, uv.y);
-                        float distToPointer = length(bladeWorldPos - pointer);
-                        
-                        if (distToPointer < effectRadius) {
-                            float influence = (1.0 - distToPointer / effectRadius);
-                            influence = influence * influence; // Quadratisch f\u00fcr sanfteren Abfall
-                            vec2 pushDir = normalize(bladeWorldPos - pointer);
-                            mouseEffect = pushDir.x * influence * 0.08 * u_pointerInfluence;
-                        }
-                        
-                        float totalBend = wind + mouseEffect;
-                        
-                        // Transformierte UV f\u00fcr diese Schicht
-                        vec2 layerUV = vec2(tileX, uv.y * (1.0 + layerDepth * 0.5));
-                        
-                        float blade = grassBlade(layerUV, basePos, heightVar, widthVar, totalBend, windPhase);
-                        
-                        // Farbe basierend auf Schicht und H\u00f6he
-                        vec3 bladeColor = mix(GRASS_DARK, GRASS_LIGHT, layerUV.y / heightVar * 0.5 + layerDepth * 0.3);
-                        bladeColor = mix(bladeColor, GRASS_SAGE, hash(vec2(i * 3.0, layer)) * 0.3);
-                        
-                        color = mix(color, bladeColor, blade * (0.7 + layerDepth * 0.3));
-                        grassMask = max(grassMask, blade);
-                    }
-                }
-                
-                // Kombiniere mit Grundfarbe
-                return mix(groundColor, color, grassMask * 0.8 + 0.2);
-            }
-
-            // === MAIN ===
-            void main() {
-                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-                float aspect = u_resolution.x / u_resolution.y;
-                
-                // Pointer normalisieren
-                vec2 pointer = u_pointer / u_resolution.xy;
-                
-                float time = u_time;
-                vec3 finalColor;
-                
-                // === HIMMEL (oberer Bereich) ===
-                if (uv.y > HORIZON_LINE) {
-                    // Sanfter Himmel-Gradient
-                    float skyT = (uv.y - HORIZON_LINE) / (1.0 - HORIZON_LINE);
-                    skyT = pow(skyT, 0.7); // Nicht-linear f\u00fcr nat\u00fcrlicheren Look
-                    
-                    vec3 skyColor = mix(SKY_HORIZON, SKY_MID, skyT * 0.6);
-                    skyColor = mix(skyColor, SKY_TOP, pow(skyT, 1.5));
-                    
-                    // Sehr subtile Wolken (nicht ablenkend!)
-                    float clouds = fbm(vec2(uv.x * 2.0 + time * 0.01, uv.y * 3.0), 3);
-                    clouds = smoothstep(0.4, 0.6, clouds) * 0.08;
-                    skyColor += clouds;
-                    
-                    finalColor = skyColor;
-                }
-                // === WIESE (unterer Bereich) ===
-                else {
-                    // Perspektive: weiter weg = h\u00f6her
-                    float grassT = 1.0 - uv.y / HORIZON_LINE;
-                    grassT = pow(grassT, 0.5);
-                    
-                    // Gras-UV mit Perspektive
-                    vec2 grassUV = vec2(uv.x * aspect, grassT);
-                    
-                    // Abstand zur Maus
-                    float pointerDist = length(uv - pointer);
-                    
-                    // Render Gras
-                    vec3 grassColor = renderGrass(grassUV, time, vec2(pointer.x * aspect, 1.0 - pointer.y / HORIZON_LINE), pointerDist);
-                    
-                    // Farbvariation basierend auf Distanz (Tiefe)
-                    grassColor = mix(grassColor, GRASS_SAGE * 0.9, grassT * 0.3);
-                    
-                    // Leichte atmosph\u00e4rische Perspektive
-                    grassColor = mix(grassColor, SKY_HORIZON, grassT * 0.15);
-                    
-                    finalColor = grassColor;
-                }
-                
-                // === HORIZONT-\u00dcBERGANG ===
-                float horizonBlend = smoothstep(HORIZON_LINE - 0.02, HORIZON_LINE + 0.02, uv.y);
-                // Sanfter \u00dcbergang bereits in der Logik oben
-                
-                // === POST-PROCESSING ===
-                
-                // Sehr sanfte Vignette (kaum sichtbar)
-                float vignette = 1.0 - length(uv - 0.5) * 0.2;
-                finalColor *= vignette;
-                
-                // Minimal Film-Grain f\u00fcr nat\u00fcrlichen Look
-                float grain = (hash(uv * 1000.0 + time) - 0.5) * 0.02;
-                finalColor += grain;
-                
-                // Leichte Farbkorrektur f\u00fcr W\u00e4rme
-                finalColor = pow(finalColor, vec3(0.98, 1.0, 1.02));
-                
-                gl_FragColor = vec4(finalColor, 1.0);
-            }
-        `;
-
-        // ========================================
-        // WEBGL SETUP
-        // ========================================
+        const video = document.getElementById('bgVideo');
+        const videoContainer = document.getElementById('videoBackground');
         
-        const canvas = document.getElementById('grassCanvas');
-        if (!canvas) {
-            console.error('Canvas nicht gefunden');
-            return;
-        }
-        
-        let gl = canvas.getContext('webgl2');
-        let isWebGL2 = true;
-        
-        if (!gl) {
-            gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            isWebGL2 = false;
-        }
-        
-        if (!gl) {
-            console.warn('WebGL nicht unterst\u00fctzt, nutze CSS Fallback');
-            canvas.style.display = 'none';
-            const fallback = document.createElement('div');
-            fallback.className = 'grass-fallback';
-            document.body.insertBefore(fallback, document.body.firstChild);
-            return;
-        }
-        
-        console.log('WebGL' + (isWebGL2 ? '2' : '1') + ' initialisiert');
+        if (!video || !videoContainer) return;
 
-        // Shader kompilieren
-        function compileShader(source, type) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error('Shader Fehler:', gl.getShaderInfoLog(shader));
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
-        }
-
-        const vertexShader = compileShader(VERTEX_SHADER, gl.VERTEX_SHADER);
-        const fragmentShader = compileShader(FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
-        
-        if (!vertexShader || !fragmentShader) {
-            console.error('Shader-Kompilierung fehlgeschlagen');
-            return;
-        }
-
-        const program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
-
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            console.error('Programm-Link Fehler:', gl.getProgramInfoLog(program));
-            return;
-        }
-
-        gl.useProgram(program);
-
-        // Fullscreen Quad
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            -1, -1,  1, -1,  -1, 1,
-            -1,  1,  1, -1,   1, 1
-        ]), gl.STATIC_DRAW);
-
-        const positionLoc = gl.getAttribLocation(program, 'a_position');
-        gl.enableVertexAttribArray(positionLoc);
-        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
-
-        // Uniforms
-        const uniforms = {
-            resolution: gl.getUniformLocation(program, 'u_resolution'),
-            time: gl.getUniformLocation(program, 'u_time'),
-            pointer: gl.getUniformLocation(program, 'u_pointer'),
-            pointerInfluence: gl.getUniformLocation(program, 'u_pointerInfluence')
-        };
-
-        // ========================================
-        // STATE
-        // ========================================
-        
-        let width = 0, height = 0;
-        let pointerX = 0, pointerY = 0;
-        let targetPointerX = 0, targetPointerY = 0;
-        let isRunning = true;
-        let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        function resize() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            width = window.innerWidth;
-            height = window.innerHeight;
-            
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            
-            gl.viewport(0, 0, canvas.width, canvas.height);
-            gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
-            
-            // Pointer in der Mitte initialisieren
-            if (pointerX === 0 && pointerY === 0) {
-                pointerX = targetPointerX = width * 0.5;
-                pointerY = targetPointerY = height * 0.7;
-            }
-        }
-
-        function onPointerMove(e) {
-            targetPointerX = e.clientX || (e.touches && e.touches[0].clientX) || targetPointerX;
-            targetPointerY = e.clientY || (e.touches && e.touches[0].clientY) || targetPointerY;
-        }
-
-        window.addEventListener('resize', resize);
-        window.addEventListener('mousemove', onPointerMove);
-        window.addEventListener('touchmove', onPointerMove, { passive: true });
-        window.addEventListener('touchstart', onPointerMove, { passive: true });
-
-        document.addEventListener('visibilitychange', () => {
-            isRunning = !document.hidden;
-            if (isRunning) requestAnimationFrame(render);
+        // Video-Fallback bei Fehler
+        video.addEventListener('error', function() {
+            console.warn('Video konnte nicht geladen werden, nutze CSS Fallback');
+            videoContainer.classList.add('video-background--fallback');
+            video.style.display = 'none';
         });
 
-        resize();
+        // Pause bei Tab-Wechsel für Performance
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) {
+                video.pause();
+            } else {
+                video.play().catch(function() {
+                    // Autoplay wurde blockiert - ist ok
+                });
+            }
+        });
 
-        // ========================================
-        // RENDER LOOP
-        // ========================================
-        
-        function render(timestamp) {
-            if (!isRunning) return;
-            
-            const timeSpeed = reducedMotion ? 0.2 : 1.0;
-            const time = timestamp * 0.001 * timeSpeed;
-            
-            // Sanfte Pointer-Interpolation
-            const smoothing = reducedMotion ? 0.05 : 0.08;
-            pointerX += (targetPointerX - pointerX) * smoothing;
-            pointerY += (targetPointerY - pointerY) * smoothing;
-            
-            gl.uniform1f(uniforms.time, time);
-            gl.uniform2f(uniforms.pointer, 
-                pointerX * (canvas.width / width), 
-                (height - pointerY) * (canvas.height / height));
-            gl.uniform1f(uniforms.pointerInfluence, reducedMotion ? 0.3 : 1.0);
-            
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            
-            requestAnimationFrame(render);
+        // Reduced Motion Support
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            video.pause();
+            // Zeige nur das erste Frame
+            video.currentTime = 0;
         }
 
-        requestAnimationFrame(render);
-        console.log('Biophiler Wiesen-Hintergrund initialisiert');
+        // Sicherstellen, dass Video läuft
+        video.play().catch(function() {
+            console.log('Autoplay wurde blockiert - Nutzer-Interaktion erforderlich');
+        });
 
+        console.log('Video-Hintergrund initialisiert');
     })();
 
     // ========================================

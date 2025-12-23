@@ -62,12 +62,51 @@
                 var(--color-grass-mid) 100%);
         }
 
-        #grassCanvas {
+        /* Video Background */
+        .video-background {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             z-index: -1;
+            overflow: hidden;
             pointer-events: none;
+        }
+
+        .video-background video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            transform: translate(-50%, -50%);
+            object-fit: cover;
+        }
+
+        .video-background::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg,
+                rgba(247, 245, 240, 0.15) 0%,
+                rgba(247, 245, 240, 0.05) 30%,
+                rgba(247, 245, 240, 0.1) 70%,
+                rgba(247, 245, 240, 0.2) 100%);
+            pointer-events: none;
+        }
+
+        .video-background--fallback {
+            background: linear-gradient(180deg, 
+                #e3f0f7 0%, 
+                #b8d4e3 25%,
+                #a8c686 55%, 
+                #7db46c 100%);
         }
 
         /* ========================================
@@ -525,7 +564,12 @@
     </style>
 </head>
 <body>
-    <canvas id="grassCanvas" aria-hidden="true"></canvas>
+    <!-- Video Background -->
+    <div class="video-background" id="videoBackground">
+        <video autoplay muted loop playsinline id="bgVideo">
+            <source src="assets/videos/wavy-grass.mp4" type="video/mp4">
+        </video>
+    </div>
 
     <!-- Header -->
     <header class="header">
@@ -838,161 +882,30 @@
         </div>
     </footer>
 
-    <!-- WebGL Grass Background -->
+    <!-- Video Background Handler -->
     <script>
     (function() {
         'use strict';
+        const video = document.getElementById('bgVideo');
+        const videoContainer = document.getElementById('videoBackground');
+        if (!video || !videoContainer) return;
 
-        const VS = `attribute vec2 a_position; void main() { gl_Position = vec4(a_position, 0.0, 1.0); }`;
+        video.addEventListener('error', function() {
+            videoContainer.classList.add('video-background--fallback');
+            video.style.display = 'none';
+        });
 
-        const FS = `
-            #ifdef GL_ES
-            precision highp float;
-            #endif
-            uniform vec2 u_resolution;
-            uniform float u_time;
-            uniform vec2 u_pointer;
-            uniform float u_pointerInfluence;
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden) video.pause();
+            else video.play().catch(function() {});
+        });
 
-            const vec3 SKY_TOP = vec3(0.89, 0.94, 0.97);
-            const vec3 SKY_MID = vec3(0.72, 0.83, 0.89);
-            const vec3 GRASS_LIGHT = vec3(0.66, 0.78, 0.53);
-            const vec3 GRASS_MID = vec3(0.49, 0.71, 0.42);
-            const vec3 GRASS_DARK = vec3(0.35, 0.60, 0.29);
-            const float HORIZON = 0.35;
-
-            float hash(vec2 p) {
-                vec3 p3 = fract(vec3(p.xyx) * 0.1031);
-                p3 += dot(p3, p3.yzx + 33.33);
-                return fract((p3.x + p3.y) * p3.z);
-            }
-
-            float noise(vec2 p) {
-                vec2 i = floor(p), f = fract(p);
-                vec2 u = f * f * (3.0 - 2.0 * f);
-                return mix(mix(hash(i), hash(i + vec2(1,0)), u.x),
-                           mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), u.x), u.y);
-            }
-
-            float fbm(vec2 p, int oct) {
-                float v = 0.0, a = 0.5;
-                for (int i = 0; i < 5; i++) {
-                    if (i >= oct) break;
-                    v += a * noise(p); p *= 2.0; a *= 0.5;
-                }
-                return v;
-            }
-
-            void main() {
-                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-                float aspect = u_resolution.x / u_resolution.y;
-                vec2 pointer = u_pointer / u_resolution.xy;
-                float time = u_time;
-                vec3 color;
-
-                if (uv.y > HORIZON) {
-                    float t = (uv.y - HORIZON) / (1.0 - HORIZON);
-                    color = mix(vec3(0.82, 0.88, 0.82), SKY_MID, pow(t, 0.7) * 0.6);
-                    color = mix(color, SKY_TOP, pow(t, 1.5));
-                    color += smoothstep(0.4, 0.6, fbm(vec2(uv.x * 2.0 + time * 0.01, uv.y * 3.0), 3)) * 0.06;
-                } else {
-                    float grassT = 1.0 - uv.y / HORIZON;
-                    vec2 grassUV = vec2(uv.x * aspect, pow(grassT, 0.5));
-                    float groundNoise = fbm(grassUV * 8.0, 3);
-                    color = mix(GRASS_DARK, GRASS_MID, groundNoise);
-                    float wind = sin(time * 0.8 + grassUV.x * 5.0) * 0.02;
-                    float pointerDist = length(uv - pointer);
-                    float mouseEffect = smoothstep(0.25, 0.0, pointerDist) * u_pointerInfluence * 0.08;
-                    float detail = fbm(grassUV * 15.0 + vec2(wind + mouseEffect, 0.0), 4);
-                    color = mix(color, GRASS_LIGHT, detail * 0.4);
-                    color = mix(color, vec3(0.53, 0.66, 0.47), grassT * 0.3);
-                    color = mix(color, vec3(0.82, 0.88, 0.82), grassT * 0.15);
-                }
-
-                color *= 1.0 - length(uv - 0.5) * 0.2;
-                color += (hash(uv * 1000.0 + time) - 0.5) * 0.015;
-                gl_FragColor = vec4(color, 1.0);
-            }
-        `;
-
-        const canvas = document.getElementById('grassCanvas');
-        if (!canvas) return;
-
-        let gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-        if (!gl) {
-            canvas.style.background = 'linear-gradient(180deg, #e3f0f7 0%, #b8d4e3 25%, #a8c686 55%, #7db46c 100%)';
-            return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            video.pause();
+            video.currentTime = 0;
         }
 
-        function compile(src, type) {
-            const s = gl.createShader(type);
-            gl.shaderSource(s, src);
-            gl.compileShader(s);
-            return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
-        }
-
-        const vs = compile(VS, gl.VERTEX_SHADER);
-        const fs = compile(FS, gl.FRAGMENT_SHADER);
-        if (!vs || !fs) return;
-
-        const prog = gl.createProgram();
-        gl.attachShader(prog, vs);
-        gl.attachShader(prog, fs);
-        gl.linkProgram(prog);
-        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
-        gl.useProgram(prog);
-
-        const buf = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
-
-        const pos = gl.getAttribLocation(prog, 'a_position');
-        gl.enableVertexAttribArray(pos);
-        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
-
-        const u = {
-            res: gl.getUniformLocation(prog, 'u_resolution'),
-            time: gl.getUniformLocation(prog, 'u_time'),
-            ptr: gl.getUniformLocation(prog, 'u_pointer'),
-            inf: gl.getUniformLocation(prog, 'u_pointerInfluence')
-        };
-
-        let w = 0, h = 0, px = 0, py = 0, tx = 0, ty = 0, run = true;
-        const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        function resize() {
-            const dpr = Math.min(devicePixelRatio || 1, 2);
-            w = innerWidth; h = innerHeight;
-            canvas.width = w * dpr; canvas.height = h * dpr;
-            canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
-            gl.viewport(0, 0, canvas.width, canvas.height);
-            gl.uniform2f(u.res, canvas.width, canvas.height);
-            if (!px && !py) { px = tx = w * 0.5; py = ty = h * 0.7; }
-        }
-
-        function move(e) {
-            tx = e.clientX || (e.touches?.[0]?.clientX) || tx;
-            ty = e.clientY || (e.touches?.[0]?.clientY) || ty;
-        }
-
-        addEventListener('resize', resize);
-        addEventListener('mousemove', move);
-        addEventListener('touchmove', move, {passive: true});
-        document.addEventListener('visibilitychange', () => { run = !document.hidden; if (run) requestAnimationFrame(render); });
-        resize();
-
-        function render(t) {
-            if (!run) return;
-            const time = t * 0.001 * (rm ? 0.2 : 1);
-            const sm = rm ? 0.05 : 0.08;
-            px += (tx - px) * sm; py += (ty - py) * sm;
-            gl.uniform1f(u.time, time);
-            gl.uniform2f(u.ptr, px * (canvas.width / w), (h - py) * (canvas.height / h));
-            gl.uniform1f(u.inf, rm ? 0.3 : 1.0);
-            gl.drawArrays(gl.TRIANGLES, 0, 6);
-            requestAnimationFrame(render);
-        }
-        requestAnimationFrame(render);
+        video.play().catch(function() {});
     })();
 
     // Nav Toggle
