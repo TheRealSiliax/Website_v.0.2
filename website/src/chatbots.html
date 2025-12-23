@@ -216,45 +216,62 @@
         }
 
         /* ========================================
-           CARD COMPONENT (Glassmorphismus)
+           CARD COMPONENT (Glowing Border Effect)
            ======================================== */
         .card {
+            --glow-gradient: linear-gradient(135deg, #f7ba2b 0%, #ea5358 50%, #ff7a3d 100%);
             position: relative;
             aspect-ratio: 4 / 5;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3px;
             border-radius: 20px;
-            overflow: hidden;
+            overflow: visible;
+            background: var(--glow-gradient);
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1;
         }
 
-        .card::before {
-            content: "";
+        /* Glowing blur effect behind the card */
+        .card::after {
             position: absolute;
-            inset: 0;
-            background: linear-gradient(
-                135deg,
-                rgba(255, 150, 50, 0.0) 0%,
-                rgba(255, 150, 50, 0.1) 100%
-            );
-            opacity: 0;
-            transition: opacity 0.4s ease;
+            content: "";
+            top: 35px;
+            left: 0;
+            right: 0;
+            z-index: -1;
+            height: 100%;
+            width: 100%;
+            transform: scale(0.85);
+            filter: blur(30px);
+            background: var(--glow-gradient);
+            opacity: 0.6;
+            transition: opacity 0.5s ease;
+            border-radius: 20px;
         }
 
         .card:hover {
             transform: translateY(-10px);
-            box-shadow: 
-                0 30px 60px rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(255, 150, 50, 0.15);
-            border-color: rgba(255, 150, 50, 0.3);
-            background: rgba(255, 255, 255, 0.08);
         }
 
-        .card:hover::before {
-            opacity: 1;
+        .card:hover::after {
+            opacity: 0;
+        }
+
+        /* Inner card content area (dark background) */
+        .card__inner {
+            background: rgba(10, 13, 46, 0.92);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-radius: 17px;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .card:hover .card__inner {
+            background: rgba(10, 13, 46, 0.97);
         }
 
         .card__content {
@@ -302,7 +319,7 @@
         }
 
         .card:hover .card__icon {
-            opacity: 0.25;
+            opacity: 0.3;
             transform: translate(-50%, -50%) scale(1.1);
             filter: grayscale(0%);
         }
@@ -314,22 +331,19 @@
             color: white;
             line-height: 1.2;
             text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         .card:hover .card__title {
-            text-shadow: 0 0 30px rgba(255, 150, 50, 0.5);
+            color: #f7ba2b;
+            text-shadow: 0 0 30px rgba(247, 186, 43, 0.5);
         }
 
         /* Hover Info Overlay */
         .card__overlay {
             position: absolute;
             inset: 0;
-            background: linear-gradient(
-                180deg,
-                rgba(10, 13, 46, 0.7) 0%,
-                rgba(10, 13, 46, 0.95) 100%
-            );
+            background: rgba(10, 13, 46, 0.95);
             backdrop-filter: blur(15px);
             -webkit-backdrop-filter: blur(15px);
             padding: 1.75rem;
@@ -340,6 +354,7 @@
             transform: translateY(20px);
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 2;
+            border-radius: 17px;
         }
 
         .card:hover .card__overlay {
@@ -352,7 +367,7 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.12em;
-            color: var(--color-primary);
+            color: #f7ba2b;
             margin-bottom: 0.5rem;
         }
 
@@ -542,29 +557,31 @@
                 <div class="cards-grid">
                     <!-- Card 1: Inneres Licht -->
                     <article class="card">
-                        <div class="card__content">
-                            <div class="card__header">
-                                <span class="card__category">Selbstentwicklung</span>
-                                <span class="card__number">01/06</span>
-                            </div>
-                            <span class="card__icon">✨</span>
-                            <h3 class="card__title">Inneres<br>Licht</h3>
-                        </div>
-                        <div class="card__overlay">
-                            <span class="card__overlay-category">Selbstentwicklung</span>
-                            <h3 class="card__overlay-title">Inneres Licht</h3>
-                            <p class="card__overlay-description">
-                                Finde dein inneres Licht und lerne, negative Energien zu transformieren. 
-                                Ein achtsamer Begleiter für emotionale Balance und persönliches Wachstum.
-                            </p>
-                            <div class="card__overlay-meta">
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Typ</span>
-                                    <span class="card__overlay-meta-value">Coaching Bot</span>
+                        <div class="card__inner">
+                            <div class="card__content">
+                                <div class="card__header">
+                                    <span class="card__category">Selbstentwicklung</span>
+                                    <span class="card__number">01/06</span>
                                 </div>
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Sprache</span>
-                                    <span class="card__overlay-meta-value">DE / EN</span>
+                                <span class="card__icon">✨</span>
+                                <h3 class="card__title">Inneres<br>Licht</h3>
+                            </div>
+                            <div class="card__overlay">
+                                <span class="card__overlay-category">Selbstentwicklung</span>
+                                <h3 class="card__overlay-title">Inneres Licht</h3>
+                                <p class="card__overlay-description">
+                                    Finde dein inneres Licht und lerne, negative Energien zu transformieren. 
+                                    Ein achtsamer Begleiter für emotionale Balance und persönliches Wachstum.
+                                </p>
+                                <div class="card__overlay-meta">
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Typ</span>
+                                        <span class="card__overlay-meta-value">Coaching Bot</span>
+                                    </div>
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Sprache</span>
+                                        <span class="card__overlay-meta-value">DE / EN</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -572,29 +589,31 @@
 
                     <!-- Card 2: Achtsamkeit -->
                     <article class="card">
-                        <div class="card__content">
-                            <div class="card__header">
-                                <span class="card__category">Meditation</span>
-                                <span class="card__number">02/06</span>
-                            </div>
-                            <span class="card__icon">🧘</span>
-                            <h3 class="card__title">Achtsamkeit</h3>
-                        </div>
-                        <div class="card__overlay">
-                            <span class="card__overlay-category">Meditation</span>
-                            <h3 class="card__overlay-title">Achtsamkeit</h3>
-                            <p class="card__overlay-description">
-                                Geführte Meditationen und Achtsamkeitsübungen für mehr Ruhe im Alltag. 
-                                Perfekt für Einsteiger und Fortgeschrittene.
-                            </p>
-                            <div class="card__overlay-meta">
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Typ</span>
-                                    <span class="card__overlay-meta-value">Guide Bot</span>
+                        <div class="card__inner">
+                            <div class="card__content">
+                                <div class="card__header">
+                                    <span class="card__category">Meditation</span>
+                                    <span class="card__number">02/06</span>
                                 </div>
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Sessions</span>
-                                    <span class="card__overlay-meta-value">50+</span>
+                                <span class="card__icon">🧘</span>
+                                <h3 class="card__title">Achtsamkeit</h3>
+                            </div>
+                            <div class="card__overlay">
+                                <span class="card__overlay-category">Meditation</span>
+                                <h3 class="card__overlay-title">Achtsamkeit</h3>
+                                <p class="card__overlay-description">
+                                    Geführte Meditationen und Achtsamkeitsübungen für mehr Ruhe im Alltag. 
+                                    Perfekt für Einsteiger und Fortgeschrittene.
+                                </p>
+                                <div class="card__overlay-meta">
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Typ</span>
+                                        <span class="card__overlay-meta-value">Guide Bot</span>
+                                    </div>
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Sessions</span>
+                                        <span class="card__overlay-meta-value">50+</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -602,29 +621,31 @@
 
                     <!-- Card 3: Lerncoach -->
                     <article class="card">
-                        <div class="card__content">
-                            <div class="card__header">
-                                <span class="card__category">Bildung</span>
-                                <span class="card__number">03/06</span>
-                            </div>
-                            <span class="card__icon">📚</span>
-                            <h3 class="card__title">Lern-<br>coach</h3>
-                        </div>
-                        <div class="card__overlay">
-                            <span class="card__overlay-category">Bildung</span>
-                            <h3 class="card__overlay-title">Lerncoach</h3>
-                            <p class="card__overlay-description">
-                                Personalisierte Lernstrategien und Gedächtnistechniken. 
-                                Optimiere deinen Lernprozess mit KI-gestützter Unterstützung.
-                            </p>
-                            <div class="card__overlay-meta">
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Typ</span>
-                                    <span class="card__overlay-meta-value">Tutor Bot</span>
+                        <div class="card__inner">
+                            <div class="card__content">
+                                <div class="card__header">
+                                    <span class="card__category">Bildung</span>
+                                    <span class="card__number">03/06</span>
                                 </div>
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Fächer</span>
-                                    <span class="card__overlay-meta-value">Alle</span>
+                                <span class="card__icon">📚</span>
+                                <h3 class="card__title">Lern-<br>coach</h3>
+                            </div>
+                            <div class="card__overlay">
+                                <span class="card__overlay-category">Bildung</span>
+                                <h3 class="card__overlay-title">Lerncoach</h3>
+                                <p class="card__overlay-description">
+                                    Personalisierte Lernstrategien und Gedächtnistechniken. 
+                                    Optimiere deinen Lernprozess mit KI-gestützter Unterstützung.
+                                </p>
+                                <div class="card__overlay-meta">
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Typ</span>
+                                        <span class="card__overlay-meta-value">Tutor Bot</span>
+                                    </div>
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Fächer</span>
+                                        <span class="card__overlay-meta-value">Alle</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -632,29 +653,31 @@
 
                     <!-- Card 4: Karriere -->
                     <article class="card">
-                        <div class="card__content">
-                            <div class="card__header">
-                                <span class="card__category">Beruf</span>
-                                <span class="card__number">04/06</span>
-                            </div>
-                            <span class="card__icon">💼</span>
-                            <h3 class="card__title">Karriere-<br>berater</h3>
-                        </div>
-                        <div class="card__overlay">
-                            <span class="card__overlay-category">Beruf</span>
-                            <h3 class="card__overlay-title">Karriereberater</h3>
-                            <p class="card__overlay-description">
-                                Bewerbungstraining, Gehaltsverhandlung und Karriereplanung. 
-                                Dein strategischer Partner für beruflichen Erfolg.
-                            </p>
-                            <div class="card__overlay-meta">
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Typ</span>
-                                    <span class="card__overlay-meta-value">Advisor Bot</span>
+                        <div class="card__inner">
+                            <div class="card__content">
+                                <div class="card__header">
+                                    <span class="card__category">Beruf</span>
+                                    <span class="card__number">04/06</span>
                                 </div>
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Branchen</span>
-                                    <span class="card__overlay-meta-value">15+</span>
+                                <span class="card__icon">💼</span>
+                                <h3 class="card__title">Karriere-<br>berater</h3>
+                            </div>
+                            <div class="card__overlay">
+                                <span class="card__overlay-category">Beruf</span>
+                                <h3 class="card__overlay-title">Karriereberater</h3>
+                                <p class="card__overlay-description">
+                                    Bewerbungstraining, Gehaltsverhandlung und Karriereplanung. 
+                                    Dein strategischer Partner für beruflichen Erfolg.
+                                </p>
+                                <div class="card__overlay-meta">
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Typ</span>
+                                        <span class="card__overlay-meta-value">Advisor Bot</span>
+                                    </div>
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Branchen</span>
+                                        <span class="card__overlay-meta-value">15+</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -662,29 +685,31 @@
 
                     <!-- Card 5: Kreativität -->
                     <article class="card">
-                        <div class="card__content">
-                            <div class="card__header">
-                                <span class="card__category">Kreativ</span>
-                                <span class="card__number">05/06</span>
-                            </div>
-                            <span class="card__icon">🎨</span>
-                            <h3 class="card__title">Kreativ-<br>studio</h3>
-                        </div>
-                        <div class="card__overlay">
-                            <span class="card__overlay-category">Kreativ</span>
-                            <h3 class="card__overlay-title">Kreativstudio</h3>
-                            <p class="card__overlay-description">
-                                Brainstorming, Ideenfindung und kreative Blockaden überwinden. 
-                                Entfalte dein kreatives Potenzial mit KI-Inspiration.
-                            </p>
-                            <div class="card__overlay-meta">
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Typ</span>
-                                    <span class="card__overlay-meta-value">Creative Bot</span>
+                        <div class="card__inner">
+                            <div class="card__content">
+                                <div class="card__header">
+                                    <span class="card__category">Kreativ</span>
+                                    <span class="card__number">05/06</span>
                                 </div>
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Techniken</span>
-                                    <span class="card__overlay-meta-value">30+</span>
+                                <span class="card__icon">🎨</span>
+                                <h3 class="card__title">Kreativ-<br>studio</h3>
+                            </div>
+                            <div class="card__overlay">
+                                <span class="card__overlay-category">Kreativ</span>
+                                <h3 class="card__overlay-title">Kreativstudio</h3>
+                                <p class="card__overlay-description">
+                                    Brainstorming, Ideenfindung und kreative Blockaden überwinden. 
+                                    Entfalte dein kreatives Potenzial mit KI-Inspiration.
+                                </p>
+                                <div class="card__overlay-meta">
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Typ</span>
+                                        <span class="card__overlay-meta-value">Creative Bot</span>
+                                    </div>
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Techniken</span>
+                                        <span class="card__overlay-meta-value">30+</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -692,29 +717,31 @@
 
                     <!-- Card 6: Simulation -->
                     <article class="card">
-                        <div class="card__content">
-                            <div class="card__header">
-                                <span class="card__category">Training</span>
-                                <span class="card__number">06/06</span>
-                            </div>
-                            <span class="card__icon">🎭</span>
-                            <h3 class="card__title">Gesprächs-<br>simulation</h3>
-                        </div>
-                        <div class="card__overlay">
-                            <span class="card__overlay-category">Training</span>
-                            <h3 class="card__overlay-title">Gesprächssimulation</h3>
-                            <p class="card__overlay-description">
-                                Übe schwierige Gespräche in einem sicheren Umfeld. 
-                                Von Konfliktgesprächen bis hin zu Präsentationen.
-                            </p>
-                            <div class="card__overlay-meta">
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Typ</span>
-                                    <span class="card__overlay-meta-value">Simulation</span>
+                        <div class="card__inner">
+                            <div class="card__content">
+                                <div class="card__header">
+                                    <span class="card__category">Training</span>
+                                    <span class="card__number">06/06</span>
                                 </div>
-                                <div class="card__overlay-meta-item">
-                                    <span class="card__overlay-meta-label">Szenarien</span>
-                                    <span class="card__overlay-meta-value">25+</span>
+                                <span class="card__icon">🎭</span>
+                                <h3 class="card__title">Gesprächs-<br>simulation</h3>
+                            </div>
+                            <div class="card__overlay">
+                                <span class="card__overlay-category">Training</span>
+                                <h3 class="card__overlay-title">Gesprächssimulation</h3>
+                                <p class="card__overlay-description">
+                                    Übe schwierige Gespräche in einem sicheren Umfeld. 
+                                    Von Konfliktgesprächen bis hin zu Präsentationen.
+                                </p>
+                                <div class="card__overlay-meta">
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Typ</span>
+                                        <span class="card__overlay-meta-value">Simulation</span>
+                                    </div>
+                                    <div class="card__overlay-meta-item">
+                                        <span class="card__overlay-meta-label">Szenarien</span>
+                                        <span class="card__overlay-meta-value">25+</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
