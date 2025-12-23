@@ -3,7 +3,7 @@
 
 # Repository URL (erforderlich)
 # SSH-URL für Authentifizierung mit SSH-Keys
-repository_url: git@github.com:TheRealSiliax/Website_v.0.1.git
+repository_url: git@github.com:TheRealSiliax/Website_v.0.2.git
 
 # Git-Benutzer-Konfiguration (optional, falls nicht global gesetzt)
 git_user_name: TheRealSiliax
