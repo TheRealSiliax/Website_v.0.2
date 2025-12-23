@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Entdecken Sie unsere KI-Assistenten und Lernbots - Interaktive Chatbots für verschiedene Anwendungsbereiche">
+    <title>KI-Assistenten | Sunset Waves</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ========================================
+           CSS RESET & BASE
+           ======================================== */
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --color-accent: #FAEF5D;
+            --color-accent-hover: #f5e740;
+            --color-bg-dark: #0a0a0a;
+            --color-bg-light: #ffffff;
+            --color-text-dark: #0a0a0a;
+            --color-text-light: #ffffff;
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--color-text-dark);
+            background: var(--color-bg-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* ========================================
+           HEADER & NAVIGATION
+           ======================================== */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: var(--color-bg-dark);
+            padding: 1rem 2rem;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .nav__logo a {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text-light);
+            text-decoration: none;
+            letter-spacing: -0.02em;
+        }
+
+        .nav__menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav__menu a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: color 0.3s var(--transition-smooth);
+        }
+
+        .nav__menu a:hover {
+            color: var(--color-accent);
+        }
+
+        .nav__actions {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav__menu-btn {
+            background: none;
+            border: none;
+            color: var(--color-text-light);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        /* ========================================
+           MAIN CONTENT
+           ======================================== */
+        .main {
+            padding-top: 80px;
+        }
+
+        /* ========================================
+           HERO SECTION
+           ======================================== */
+        .hero {
+            background: var(--color-bg-dark);
+            padding: 4rem 2rem 6rem;
+            color: var(--color-text-light);
+        }
+
+        .hero__content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero__title {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero__subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            max-width: 600px;
+            line-height: 1.7;
+        }
+
+        /* ========================================
+           CARDS GRID
+           ======================================== */
+        .cards-section {
+            padding: 4rem 2rem;
+            background: var(--color-bg-light);
+        }
+
+        .cards-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .cards-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        .cards-header__title {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .cards-header__count {
+            font-size: 0.85rem;
+            color: rgba(0, 0, 0, 0.5);
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        /* ========================================
+           CARD COMPONENT (P10 Style)
+           ======================================== */
+        .card {
+            position: relative;
+            aspect-ratio: 3 / 4;
+            background: var(--color-accent);
+            border-radius: 0;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.4s var(--transition-smooth),
+                        box-shadow 0.4s var(--transition-smooth);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .card__content {
+            position: absolute;
+            inset: 0;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .card__category {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--color-text-dark);
+            opacity: 0.7;
+        }
+
+        .card__number {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--color-text-dark);
+            opacity: 0.5;
+        }
+
+        .card__title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-text-dark);
+            line-height: 1.2;
+            transition: opacity 0.3s var(--transition-smooth);
+        }
+
+        /* Hover Info Overlay */
+        .card__overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--color-accent);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.4s var(--transition-smooth),
+                        transform 0.4s var(--transition-smooth);
+        }
+
+        .card:hover .card__overlay {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover .card__title {
+            opacity: 0;
+        }
+
+        .card__overlay-category {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-dark);
+            opacity: 0.6;
+            margin-bottom: 0.5rem;
+        }
+
+        .card__overlay-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--color-text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .card__overlay-description {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: var(--color-text-dark);
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+        }
+
+        .card__overlay-meta {
+            display: flex;
+            gap: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .card__overlay-meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .card__overlay-meta-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--color-text-dark);
+            opacity: 0.5;
+        }
+
+        .card__overlay-meta-value {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--color-text-dark);
+        }
+
+        /* Card Icon */
+        .card__icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            opacity: 0.15;
+            transition: opacity 0.3s var(--transition-smooth),
+                        transform 0.3s var(--transition-smooth);
+        }
+
+        .card:hover .card__icon {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        /* ========================================
+           FOOTER
+           ======================================== */
+        .footer {
+            background: var(--color-bg-dark);
+            color: var(--color-text-light);
+            padding: 3rem 2rem;
+        }
+
+        .footer__content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer__text {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .footer__link {
+            color: var(--color-accent);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s var(--transition-smooth);
+        }
+
+        .footer__link:hover {
+            opacity: 0.8;
+        }
+
+        /* ========================================
+           RESPONSIVE
+           ======================================== */
+        @media (max-width: 768px) {
+            .nav__menu {
+                display: none;
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero__title {
+                font-size: 2rem;
+            }
+
+            .footer__content {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        /* ========================================
+           ANIMATIONS
+           ======================================== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card {
+            animation: fadeInUp 0.6s var(--transition-smooth) backwards;
+        }
+
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+        .card:nth-child(5) { animation-delay: 0.5s; }
+        .card:nth-child(6) { animation-delay: 0.6s; }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="nav__logo">
+                <a href="index.html">Sunset Waves</a>
+            </div>
+            <ul class="nav__menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#about">Über uns</a></li>
+                <li><a href="chatbots.html" style="color: var(--color-accent);">KI-Assistenten</a></li>
+                <li><a href="index.html#services">Services</a></li>
+                <li><a href="index.html#contact">Kontakt</a></li>
+            </ul>
+            <div class="nav__actions">
+                <button class="nav__menu-btn">Menü</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero__content">
+                <h1 class="hero__title">KI-Assistenten &<br>Lernbegleiter</h1>
+                <p class="hero__subtitle">
+                    Entdecken Sie unsere Sammlung intelligenter Chatbots und Simulationen. 
+                    Jeder Assistent wurde entwickelt, um Sie in verschiedenen Bereichen zu unterstützen – 
+                    von persönlichem Wachstum bis hin zu professioneller Entwicklung.
+                </p>
+            </div>
+        </section>
+
+        <!-- Cards Section -->
+        <section class="cards-section">
+            <div class="cards-container">
+                <div class="cards-header">
+                    <span class="cards-header__title">Verfügbare Assistenten</span>
+                    <span class="cards-header__count">06/06</span>
+                </div>
+
+                <div class="cards-grid">
+                    <!-- Card 1: Inneres Licht -->
+                    <article class="card">
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">Selbstentwicklung</span>
+                                <span class="card__number">01/06</span>
+                            </div>
+                            <span class="card__icon">✨</span>
+                            <h3 class="card__title">Inneres<br>Licht</h3>
+                        </div>
+                        <div class="card__overlay">
+                            <span class="card__overlay-category">Selbstentwicklung</span>
+                            <h3 class="card__overlay-title">Inneres Licht</h3>
+                            <p class="card__overlay-description">
+                                Finde dein inneres Licht und lerne, negative Energien zu transformieren. 
+                                Ein achtsamer Begleiter für emotionale Balance und persönliches Wachstum.
+                            </p>
+                            <div class="card__overlay-meta">
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Typ</span>
+                                    <span class="card__overlay-meta-value">Coaching Bot</span>
+                                </div>
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Sprache</span>
+                                    <span class="card__overlay-meta-value">DE / EN</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 2: Achtsamkeit -->
+                    <article class="card">
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">Meditation</span>
+                                <span class="card__number">02/06</span>
+                            </div>
+                            <span class="card__icon">🧘</span>
+                            <h3 class="card__title">Achtsamkeit</h3>
+                        </div>
+                        <div class="card__overlay">
+                            <span class="card__overlay-category">Meditation</span>
+                            <h3 class="card__overlay-title">Achtsamkeit</h3>
+                            <p class="card__overlay-description">
+                                Geführte Meditationen und Achtsamkeitsübungen für mehr Ruhe im Alltag. 
+                                Perfekt für Einsteiger und Fortgeschrittene.
+                            </p>
+                            <div class="card__overlay-meta">
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Typ</span>
+                                    <span class="card__overlay-meta-value">Guide Bot</span>
+                                </div>
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Sessions</span>
+                                    <span class="card__overlay-meta-value">50+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 3: Lerncoach -->
+                    <article class="card">
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">Bildung</span>
+                                <span class="card__number">03/06</span>
+                            </div>
+                            <span class="card__icon">📚</span>
+                            <h3 class="card__title">Lern-<br>coach</h3>
+                        </div>
+                        <div class="card__overlay">
+                            <span class="card__overlay-category">Bildung</span>
+                            <h3 class="card__overlay-title">Lerncoach</h3>
+                            <p class="card__overlay-description">
+                                Personalisierte Lernstrategien und Gedächtnistechniken. 
+                                Optimiere deinen Lernprozess mit KI-gestützter Unterstützung.
+                            </p>
+                            <div class="card__overlay-meta">
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Typ</span>
+                                    <span class="card__overlay-meta-value">Tutor Bot</span>
+                                </div>
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Fächer</span>
+                                    <span class="card__overlay-meta-value">Alle</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 4: Karriere -->
+                    <article class="card">
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">Beruf</span>
+                                <span class="card__number">04/06</span>
+                            </div>
+                            <span class="card__icon">💼</span>
+                            <h3 class="card__title">Karriere-<br>berater</h3>
+                        </div>
+                        <div class="card__overlay">
+                            <span class="card__overlay-category">Beruf</span>
+                            <h3 class="card__overlay-title">Karriereberater</h3>
+                            <p class="card__overlay-description">
+                                Bewerbungstraining, Gehaltsverhandlung und Karriereplanung. 
+                                Dein strategischer Partner für beruflichen Erfolg.
+                            </p>
+                            <div class="card__overlay-meta">
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Typ</span>
+                                    <span class="card__overlay-meta-value">Advisor Bot</span>
+                                </div>
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Branchen</span>
+                                    <span class="card__overlay-meta-value">15+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 5: Kreativität -->
+                    <article class="card">
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">Kreativ</span>
+                                <span class="card__number">05/06</span>
+                            </div>
+                            <span class="card__icon">🎨</span>
+                            <h3 class="card__title">Kreativ-<br>studio</h3>
+                        </div>
+                        <div class="card__overlay">
+                            <span class="card__overlay-category">Kreativ</span>
+                            <h3 class="card__overlay-title">Kreativstudio</h3>
+                            <p class="card__overlay-description">
+                                Brainstorming, Ideenfindung und kreative Blockaden überwinden. 
+                                Entfalte dein kreatives Potenzial mit KI-Inspiration.
+                            </p>
+                            <div class="card__overlay-meta">
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Typ</span>
+                                    <span class="card__overlay-meta-value">Creative Bot</span>
+                                </div>
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Techniken</span>
+                                    <span class="card__overlay-meta-value">30+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- Card 6: Simulation -->
+                    <article class="card">
+                        <div class="card__content">
+                            <div class="card__header">
+                                <span class="card__category">Training</span>
+                                <span class="card__number">06/06</span>
+                            </div>
+                            <span class="card__icon">🎭</span>
+                            <h3 class="card__title">Gesprächs-<br>simulation</h3>
+                        </div>
+                        <div class="card__overlay">
+                            <span class="card__overlay-category">Training</span>
+                            <h3 class="card__overlay-title">Gesprächssimulation</h3>
+                            <p class="card__overlay-description">
+                                Übe schwierige Gespräche in einem sicheren Umfeld. 
+                                Von Konfliktgesprächen bis hin zu Präsentationen.
+                            </p>
+                            <div class="card__overlay-meta">
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Typ</span>
+                                    <span class="card__overlay-meta-value">Simulation</span>
+                                </div>
+                                <div class="card__overlay-meta-item">
+                                    <span class="card__overlay-meta-label">Szenarien</span>
+                                    <span class="card__overlay-meta-value">25+</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer__content">
+            <p class="footer__text">&copy; 2025 Sunset Waves. Alle Rechte vorbehalten.</p>
+            <a href="index.html" class="footer__link">← Zurück zur Startseite</a>
+        </div>
+    </footer>
+</body>
+</html>
+
