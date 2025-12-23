@@ -81,3 +81,4 @@ Bei Problemen siehe:
 - `docs/setup/troubleshooting.md` (kommt noch)
 - `docs/api/` für API-Dokumentation
 
+

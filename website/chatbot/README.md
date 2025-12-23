@@ -58,3 +58,4 @@ Bearbeite `prompts/default.md` um das Verhalten der KI anzupassen.
 
 Die Styles befinden sich in `src/styles/main.css` unter dem Abschnitt "CHATBOT WIDGET".
 
+

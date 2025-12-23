@@ -497,3 +497,4 @@ export function initWaveBackground(canvasId = 'waveCanvas', config = {}) {
     return new WaveBackground(canvasId, config);
 }
 
+

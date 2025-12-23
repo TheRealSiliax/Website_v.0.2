@@ -53,3 +53,4 @@ Falls du Tailwind CSS verwendest, kannst du hier auch Tailwind-Konfigurationen a
 2. Definiere die Komponenten-Struktur in `components/`
 3. Erstelle Beispiel-Inhalte in `mockups/`
 
+

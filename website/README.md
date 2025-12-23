@@ -69,3 +69,4 @@ website/
 - **API-Keys niemals committen!** Verwende `.env` Dateien
 - Die `.gitignore` schützt sensible Daten automatisch
 
+

@@ -406,10 +406,14 @@
             backdrop-filter: blur(20px);
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            display: flex;
             flex-direction: column;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+
+        .chatbot__window:not([hidden]) {
+            display: flex;
         }
 
         .chatbot__header {
@@ -427,12 +431,28 @@
         }
 
         .chatbot__close {
-            background: none;
+            background: rgba(255, 255, 255, 0.1);
             border: none;
             color: white;
             font-size: 24px;
             cursor: pointer;
             line-height: 1;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot__close:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        .chatbot__close:active {
+            transform: scale(0.95);
         }
 
         .chatbot__messages {
@@ -1145,50 +1165,90 @@
     // CHATBOT FUNCTIONALITY
     // ========================================
     (function() {
-        const toggle = document.getElementById('chatbotToggle');
-        const window_ = document.getElementById('chatbotWindow');
-        const close = document.getElementById('chatbotClose');
-        const form = document.getElementById('chatbotForm');
-        const input = document.getElementById('chatbotInput');
-        const messages = document.getElementById('chatbotMessages');
+        const chatbotToggleBtn = document.getElementById('chatbotToggle');
+        const chatbotWindowEl = document.getElementById('chatbotWindow');
+        const chatbotCloseBtn = document.getElementById('chatbotClose');
+        const chatbotForm = document.getElementById('chatbotForm');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotMessages = document.getElementById('chatbotMessages');
 
-        if (!toggle || !window_) return;
+        if (!chatbotToggleBtn || !chatbotWindowEl) {
+            console.error('Chatbot elements not found');
+            return;
+        }
 
-        toggle.addEventListener('click', () => {
-            const isHidden = window_.hidden;
-            window_.hidden = !isHidden;
-            if (!isHidden) return;
-            setTimeout(() => input && input.focus(), 100);
-        });
+        // Track chatbot open state
+        let isChatbotOpen = false;
 
-        close && close.addEventListener('click', () => {
-            window_.hidden = true;
-        });
+        // Function to open chatbot
+        function openChatbot() {
+            chatbotWindowEl.hidden = false;
+            chatbotWindowEl.style.display = 'flex';
+            isChatbotOpen = true;
+            setTimeout(() => chatbotInput && chatbotInput.focus(), 100);
+            console.log('Chatbot opened');
+        }
 
-        form && form.addEventListener('submit', (e) => {
+        // Function to close chatbot
+        function closeChatbot() {
+            chatbotWindowEl.hidden = true;
+            chatbotWindowEl.style.display = 'none';
+            isChatbotOpen = false;
+            console.log('Chatbot closed');
+        }
+
+        // Toggle button click handler
+        chatbotToggleBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            const text = input.value.trim();
-            if (!text) return;
-            
-            // Add user message
-            const userMsg = document.createElement('div');
-            userMsg.className = 'chatbot__message chatbot__message--user';
-            userMsg.textContent = text;
-            messages.appendChild(userMsg);
-            
-            input.value = '';
-            
-            // Simulate bot response
-            setTimeout(() => {
-                const botMsg = document.createElement('div');
-                botMsg.className = 'chatbot__message chatbot__message--bot';
-                botMsg.textContent = 'Vielen Dank für Ihre Nachricht! Im Live-Modus würde ich Ihnen eine KI-generierte Antwort geben.';
-                messages.appendChild(botMsg);
-                messages.scrollTop = messages.scrollHeight;
-            }, 1000);
-            
-            messages.scrollTop = messages.scrollHeight;
+            e.stopPropagation();
+            if (isChatbotOpen) {
+                closeChatbot();
+            } else {
+                openChatbot();
+            }
         });
+
+        // Close button click handler
+        if (chatbotCloseBtn) {
+            chatbotCloseBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeChatbot();
+            });
+            console.log('Close button handler attached');
+        } else {
+            console.error('Close button not found');
+        }
+
+        // Form submit handler
+        if (chatbotForm) {
+            chatbotForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const text = chatbotInput.value.trim();
+                if (!text) return;
+                
+                // Add user message
+                const userMsg = document.createElement('div');
+                userMsg.className = 'chatbot__message chatbot__message--user';
+                userMsg.textContent = text;
+                chatbotMessages.appendChild(userMsg);
+                
+                chatbotInput.value = '';
+                
+                // Simulate bot response
+                setTimeout(() => {
+                    const botMsg = document.createElement('div');
+                    botMsg.className = 'chatbot__message chatbot__message--bot';
+                    botMsg.textContent = 'Vielen Dank für Ihre Nachricht! Im Live-Modus würde ich Ihnen eine KI-generierte Antwort geben.';
+                    chatbotMessages.appendChild(botMsg);
+                    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+                }, 1000);
+                
+                chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+            });
+        }
+
+        console.log('Chatbot initialized successfully');
     })();
 
     // ========================================

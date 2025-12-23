@@ -45,3 +45,4 @@ Du bist ein freundlicher und hilfreicher KI-Assistent für unsere Website.
 - E-Mail: kontakt@example.com
 - Telefon: +49 123 456789
 
+

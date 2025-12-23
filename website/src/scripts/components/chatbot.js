@@ -174,3 +174,4 @@ function addWelcomeMessage(container) {
     addMessage(container, welcomeMessage, 'bot');
 }
 
+
