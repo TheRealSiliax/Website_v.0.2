@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Lernmaterialien für Berufsbildung - Berufsschule, Berufsfachschule, Berufsoberschule. Sortiert nach Lernfeldern und Klassen.">
-    <title>Lernmaterialien | Sunset Waves</title>
+    <meta name="description" content="Lernmaterialien für Berufsbildung - NATUR UDL Lernplattform mit biophilem Design">
+    <title>Lernmaterialien | NATUR UDL</title>
     
-    <!-- Fonts - Inter für moderne Typografie -->
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* ========================================
-           CSS RESET & BASE (Konsistent mit index.html)
+           BIOPHILIC DESIGN SYSTEM
            ======================================== */
         *, *::before, *::after {
             margin: 0;
@@ -22,64 +22,65 @@
         }
 
         :root {
-            --color-primary: #ff7a3d;
-            --color-primary-dark: #e65a1d;
-            --color-accent: #f7ba2b;
-            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --color-grass-light: #a8c686;
+            --color-grass-mid: #7db46c;
+            --color-sage: #87a878;
+            --color-moss: #6b8e5f;
+            --color-earth-warm: #c4a77d;
+            --color-sand: #e8dcc4;
+            --color-sky-soft: #b8d4e3;
+            --color-sky-pale: #e3f0f7;
+            --color-bg-cream: #f7f5f0;
+            --color-bg-warm: #faf8f3;
+            --color-text-primary: #2d3a2e;
+            --color-text-secondary: #4a5a4b;
+            --color-text-muted: #6b7a6c;
+            --color-accent: #d4a574;
+            --glass-bg: rgba(247, 245, 240, 0.92);
+            --glass-border: rgba(135, 168, 120, 0.2);
+            --font-heading: 'Merriweather', Georgia, serif;
+            --font-body: 'Lato', sans-serif;
+            --radius-soft: 12px;
+            --radius-organic: 20px;
+            --shadow-soft: 0 4px 20px rgba(45, 58, 46, 0.08);
+            --shadow-hover: 0 8px 30px rgba(45, 58, 46, 0.12);
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: var(--font-primary);
+            font-family: var(--font-body);
             font-size: 16px;
-            line-height: 1.6;
-            color: white;
+            line-height: 1.7;
+            color: var(--color-text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            background: radial-gradient(circle at 60% 45%, rgba(255,122,61,0.35), transparent 45%), 
-                        linear-gradient(180deg, #1a0f2e 0%, #5b245e 35%, #0b1630 70%, #060814 100%);
+            background: linear-gradient(180deg, 
+                var(--color-sky-pale) 0%, 
+                var(--color-sky-soft) 25%,
+                var(--color-grass-light) 60%, 
+                var(--color-grass-mid) 100%);
         }
 
-        /* ========================================
-           WAVE BACKGROUND CANVAS
-           ======================================== */
-        #waveCanvas {
+        #grassCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             z-index: -1;
             pointer-events: none;
         }
 
-        .wave-fallback {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: radial-gradient(circle at 60% 45%, rgba(255,122,61,0.35), transparent 45%), 
-                        linear-gradient(180deg, #1a0f2e 0%, #5b245e 35%, #0b1630 70%, #060814 100%);
-        }
-
         /* ========================================
-           HEADER & NAVIGATION
+           HEADER
            ======================================== */
         .header {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
-            background: rgba(10, 13, 46, 0.7);
+            background: var(--glass-bg);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .nav {
@@ -87,17 +88,19 @@
             justify-content: space-between;
             align-items: center;
             padding: 1rem 2rem;
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .nav__logo a {
-            font-size: 1.25rem;
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
             font-weight: 700;
-            color: white;
+            color: var(--color-text-primary);
             text-decoration: none;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
+
+        .nav__logo span { color: var(--color-sage); }
 
         .nav__menu {
             display: flex;
@@ -106,22 +109,33 @@
         }
 
         .nav__menu a {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--color-text-secondary);
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav__menu a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px; left: 0;
+            width: 0; height: 2px;
+            background: var(--color-sage);
+            transition: width 0.3s ease;
         }
 
         .nav__menu a:hover,
-        .nav__menu a.active {
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 150, 50, 0.8);
-        }
+        .nav__menu a.active { color: var(--color-text-primary); }
+
+        .nav__menu a:hover::after,
+        .nav__menu a.active::after { width: 100%; }
 
         .nav__toggle {
             display: none;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
             background: none;
             border: none;
             cursor: pointer;
@@ -129,179 +143,63 @@
         }
 
         .nav__toggle span {
-            width: 25px;
+            width: 24px;
             height: 2px;
-            background: white;
-        }
-
-        /* Nav Actions & Search */
-        .nav__actions {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .search {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        .search__toggle {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0.5rem;
-            color: rgba(255, 255, 255, 0.9);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .search__toggle:hover {
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .search__toggle svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        .search__input-wrapper {
-            position: absolute;
-            right: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            display: flex;
-            align-items: center;
-            background: rgba(10, 13, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            overflow: hidden;
-            width: 0;
-            opacity: 0;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            pointer-events: none;
-        }
-
-        .search.active .search__input-wrapper {
-            width: 280px;
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .search__input {
-            width: 100%;
-            padding: 0.65rem 1rem;
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 0.9rem;
-            font-family: inherit;
-            outline: none;
-        }
-
-        .search__input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .search__submit {
-            background: var(--color-primary);
-            border: none;
-            padding: 0.65rem 1rem;
-            cursor: pointer;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.3s ease;
-        }
-
-        .search__submit:hover {
-            background: var(--color-primary-dark);
-        }
-
-        .search__submit svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .search__close {
-            background: none;
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-            color: rgba(255, 255, 255, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s ease;
-        }
-
-        .search__close:hover {
-            color: white;
+            background-color: var(--color-text-primary);
         }
 
         /* ========================================
-           MAIN CONTENT
+           MAIN
            ======================================== */
         .main {
             padding-top: 80px;
             min-height: 100vh;
         }
 
-        /* ========================================
-           HERO SECTION
-           ======================================== */
         .hero {
             padding: 5rem 2rem 3rem;
             text-align: center;
         }
 
         .hero__title {
+            font-family: var(--font-heading);
             font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: -0.03em;
-            line-height: 1.1;
+            line-height: 1.2;
             margin-bottom: 1rem;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
+            color: var(--color-text-primary);
+            text-shadow: 0 2px 20px rgba(255, 255, 255, 0.5);
         }
 
         .hero__subtitle {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.85);
+            color: var(--color-text-secondary);
             max-width: 700px;
             margin: 0 auto;
             line-height: 1.7;
         }
 
-        /* ========================================
-           FILTER SECTION
-           ======================================== */
+        /* Filter */
         .filter-section {
-            padding: 2rem;
-            max-width: 1200px;
+            padding: 1.5rem 2rem;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .filter-bar {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
             flex-wrap: wrap;
             justify-content: center;
-            margin-bottom: 2rem;
         }
 
         .filter-btn {
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.6rem 1.25rem;
+            background: var(--color-bg-warm);
+            border: 1px solid var(--glass-border);
             border-radius: 25px;
-            color: rgba(255, 255, 255, 0.8);
+            color: var(--color-text-secondary);
             font-family: inherit;
             font-size: 0.9rem;
             font-weight: 500;
@@ -310,101 +208,23 @@
         }
 
         .filter-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 150, 50, 0.3);
+            border-color: var(--color-sage);
+            color: var(--color-text-primary);
         }
 
         .filter-btn.active {
-            background: var(--color-primary);
-            border-color: var(--color-primary);
+            background: linear-gradient(135deg, var(--color-sage), var(--color-moss));
+            border-color: transparent;
             color: white;
         }
 
-        .filter-dropdown {
-            position: relative;
-        }
-
-        .filter-dropdown__btn {
-            padding: 0.75rem 1.5rem;
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 25px;
-            color: rgba(255, 255, 255, 0.8);
-            font-family: inherit;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-dropdown__btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .filter-dropdown__btn svg {
-            width: 16px;
-            height: 16px;
-            transition: transform 0.3s ease;
-        }
-
-        .filter-dropdown.open .filter-dropdown__btn svg {
-            transform: rotate(180deg);
-        }
-
-        .filter-dropdown__menu {
-            position: absolute;
-            top: calc(100% + 0.5rem);
-            left: 50%;
-            transform: translateX(-50%);
-            min-width: 220px;
-            background: rgba(10, 13, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            padding: 0.5rem;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-            z-index: 100;
-        }
-
-        .filter-dropdown.open .filter-dropdown__menu {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .filter-dropdown__item {
-            padding: 0.75rem 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            font-size: 0.9rem;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-        }
-
-        .filter-dropdown__item:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .filter-dropdown__item.active {
-            background: var(--color-primary);
-            color: white;
-        }
-
-        /* ========================================
-           CATEGORIES GRID
-           ======================================== */
+        /* Categories */
         .categories-section {
-            padding: 2rem;
+            padding: 2rem 2rem 4rem;
         }
 
         .categories-container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
@@ -418,14 +238,14 @@
             gap: 1rem;
             margin-bottom: 1.5rem;
             padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
         }
 
         .category-group__icon {
             width: 48px;
             height: 48px;
-            background: linear-gradient(135deg, var(--color-primary), var(--color-accent));
-            border-radius: 12px;
+            background: linear-gradient(135deg, var(--color-grass-light), var(--color-sage));
+            border-radius: var(--radius-soft);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -433,156 +253,32 @@
         }
 
         .category-group__title {
+            font-family: var(--font-heading);
             font-size: 1.5rem;
             font-weight: 700;
-            color: white;
+            color: var(--color-text-primary);
         }
 
         .category-group__count {
             font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--color-text-muted);
             margin-left: auto;
         }
 
-        .materials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        /* ========================================
-           MATERIAL CARD
-           ======================================== */
-        .material-card {
-            --glow-gradient: linear-gradient(135deg, #f7ba2b 0%, #ea5358 50%, #ff7a3d 100%);
-            background: var(--glow-gradient);
-            border-radius: 16px;
-            padding: 2px;
-            position: relative;
-            overflow: visible;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
-        }
-
-        .material-card::after {
-            position: absolute;
-            content: "";
-            top: 25px;
-            left: 0;
-            right: 0;
-            z-index: -1;
-            height: 100%;
-            width: 100%;
-            transform: scale(0.9);
-            filter: blur(25px);
-            background: var(--glow-gradient);
-            opacity: 0.5;
-            transition: opacity 0.5s ease;
-            border-radius: 16px;
-        }
-
-        .material-card:hover {
-            transform: translateY(-8px);
-        }
-
-        .material-card:hover::after {
-            opacity: 0;
-        }
-
-        .material-card__inner {
-            background: rgba(10, 13, 46, 0.95);
-            border-radius: 14px;
-            padding: 1.5rem;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .material-card__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-        }
-
-        .material-card__badge {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            padding: 0.35rem 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .material-card__type {
-            font-size: 1.5rem;
-        }
-
-        .material-card__title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 0.5rem;
-            line-height: 1.3;
-            transition: color 0.3s ease;
-        }
-
-        .material-card:hover .material-card__title {
-            color: var(--color-accent);
-        }
-
-        .material-card__description {
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-            flex-grow: 1;
-        }
-
-        .material-card__meta {
-            display: flex;
-            gap: 1rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .material-card__meta-item {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .material-card__meta-item svg {
-            width: 14px;
-            height: 14px;
-        }
-
-        /* ========================================
-           LERNFELD TABS
-           ======================================== */
-        .lernfeld-section {
-            padding: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
+        /* Lernfeld Tabs */
         .lernfeld-tabs {
             display: flex;
             gap: 0.5rem;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .lernfeld-tab {
-            padding: 0.6rem 1.25rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            background: var(--color-bg-warm);
+            border: 1px solid var(--glass-border);
             border-radius: 8px;
-            color: rgba(255, 255, 255, 0.7);
+            color: var(--color-text-secondary);
             font-family: inherit;
             font-size: 0.85rem;
             font-weight: 500;
@@ -591,113 +287,177 @@
         }
 
         .lernfeld-tab:hover {
-            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--color-sage);
         }
 
         .lernfeld-tab.active {
-            background: var(--color-primary);
-            border-color: var(--color-primary);
+            background: var(--color-sage);
+            border-color: var(--color-sage);
             color: white;
+        }
+
+        /* Materials Grid */
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.25rem;
+        }
+
+        /* Material Card */
+        .material-card {
+            background: var(--color-bg-warm);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-organic);
+            transition: all 0.4s ease;
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .material-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-sage);
+        }
+
+        .material-card__inner {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .material-card__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.75rem;
+        }
+
+        .material-card__badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            padding: 0.3rem 0.7rem;
+            background: linear-gradient(135deg, var(--color-sage), var(--color-moss));
+            border-radius: 20px;
+            color: white;
+        }
+
+        .material-card__type {
+            font-size: 1.3rem;
+        }
+
+        .material-card__title {
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--color-text-primary);
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+            transition: color 0.3s ease;
+        }
+
+        .material-card:hover .material-card__title {
+            color: var(--color-moss);
+        }
+
+        .material-card__description {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .material-card__meta {
+            display: flex;
+            gap: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .material-card__meta-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+        }
+
+        .material-card__meta-item svg {
+            width: 14px;
+            height: 14px;
         }
 
         /* ========================================
            FOOTER
            ======================================== */
         .footer {
-            background: rgba(5, 8, 22, 0.95);
+            background: rgba(45, 58, 46, 0.95);
             backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.8);
-            padding: 4rem 2rem 2rem;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 3rem 2rem 1.5rem;
         }
 
         .footer__container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
         .footer__grid {
             display: grid;
             grid-template-columns: 2fr repeat(3, 1fr);
-            gap: 3rem;
-            margin-bottom: 3rem;
-        }
-
-        .footer__brand {
-            padding-right: 2rem;
+            gap: 2.5rem;
+            margin-bottom: 2rem;
         }
 
         .footer__logo {
-            font-size: 1.5rem;
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
             font-weight: 700;
             color: white;
-            margin-bottom: 1rem;
-            display: block;
+            margin-bottom: 0.75rem;
         }
+
+        .footer__logo span { color: var(--color-grass-light); }
 
         .footer__description {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             line-height: 1.7;
             color: rgba(255, 255, 255, 0.6);
-            margin-bottom: 1.5rem;
-        }
-
-        .footer__social {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .footer__social-link {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: all 0.3s ease;
-            font-size: 1.1rem;
-        }
-
-        .footer__social-link:hover {
-            background: var(--color-primary);
-            color: white;
-            transform: translateY(-3px);
         }
 
         .footer__column-title {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             color: rgba(255, 255, 255, 0.5);
-            margin-bottom: 1.25rem;
+            margin-bottom: 1rem;
         }
 
         .footer__links {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.75rem;
+            gap: 0.6rem;
         }
 
         .footer__links a {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.75);
             text-decoration: none;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             transition: all 0.3s ease;
         }
 
         .footer__links a:hover {
-            color: var(--color-primary);
+            color: var(--color-grass-light);
             padding-left: 5px;
         }
 
         .footer__bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 2rem;
+            padding-top: 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -706,127 +466,72 @@
         }
 
         .footer__copyright {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
         }
 
         .footer__legal {
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         .footer__legal a {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: rgba(255, 255, 255, 0.5);
             text-decoration: none;
-            transition: color 0.3s ease;
         }
 
         .footer__legal a:hover {
-            color: var(--color-primary);
+            color: var(--color-grass-light);
         }
 
         /* ========================================
            RESPONSIVE
            ======================================== */
         @media (max-width: 900px) {
-            .footer__grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 2rem;
-            }
-
-            .footer__brand {
-                grid-column: 1 / -1;
-                padding-right: 0;
-            }
+            .footer__grid { grid-template-columns: 1fr 1fr; }
+            .footer__brand { grid-column: 1 / -1; }
         }
 
         @media (max-width: 768px) {
-            .nav__menu {
-                display: none;
-            }
+            .nav__menu { display: none; }
+            .nav__toggle { display: flex; }
+            .filter-bar { flex-direction: column; align-items: stretch; }
+            .filter-btn { width: 100%; justify-content: center; }
+            .materials-grid { grid-template-columns: 1fr; }
+            .footer__grid { grid-template-columns: 1fr; }
+            .footer__bottom { flex-direction: column; text-align: center; }
+        }
 
-            .nav__toggle {
-                display: flex;
-            }
-
-            .filter-bar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .filter-btn,
-            .filter-dropdown__btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .materials-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .search.active .search__input-wrapper {
-                position: fixed;
-                top: 70px;
-                left: 1rem;
-                right: 1rem;
-                width: auto;
-                transform: none;
-                border-radius: 12px;
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
-        @media (max-width: 600px) {
-            .footer__grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer__bottom {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .footer__legal {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-        }
-
-        /* ========================================
-           ANIMATIONS
-           ======================================== */
         @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .material-card {
             animation: fadeInUp 0.5s ease backwards;
         }
-
         .material-card:nth-child(1) { animation-delay: 0.05s; }
         .material-card:nth-child(2) { animation-delay: 0.1s; }
         .material-card:nth-child(3) { animation-delay: 0.15s; }
         .material-card:nth-child(4) { animation-delay: 0.2s; }
-        .material-card:nth-child(5) { animation-delay: 0.25s; }
-        .material-card:nth-child(6) { animation-delay: 0.3s; }
     </style>
 </head>
 <body>
-    <!-- WebGL Wave Background Canvas -->
-    <canvas id="waveCanvas" aria-hidden="true"></canvas>
+    <canvas id="grassCanvas" aria-hidden="true"></canvas>
 
     <!-- Header -->
     <header class="header">
         <nav class="nav">
             <div class="nav__logo">
-                <a href="index.html">Sunset Waves</a>
+                <a href="index.html"><span>NATUR</span> UDL</a>
             </div>
             <ul class="nav__menu">
                 <li><a href="index.html">Home</a></li>
@@ -834,105 +539,35 @@
                 <li><a href="lernmaterialien.html" class="active">Lernmaterialien</a></li>
                 <li><a href="index.html#contact">Kontakt</a></li>
             </ul>
-            <div class="nav__actions">
-                <!-- Search -->
-                <div class="search" id="search">
-                    <button class="search__toggle" id="searchToggle" aria-label="Suche öffnen">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="M21 21l-4.35-4.35"></path>
-                        </svg>
-                    </button>
-                    <div class="search__input-wrapper">
-                        <input type="text" class="search__input" id="searchInput" placeholder="Lernmaterial suchen..." aria-label="Suchbegriff">
-                        <button class="search__close" id="searchClose" aria-label="Suche schließen">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                                <path d="M18 6L6 18M6 6l12 12"></path>
-                            </svg>
-                        </button>
-                        <button class="search__submit" aria-label="Suchen">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="11" cy="11" r="8"></circle>
-                                <path d="M21 21l-4.35-4.35"></path>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <!-- Mobile Menu Toggle -->
-                <button class="nav__toggle" id="navToggle" aria-label="Menü öffnen">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+            <button class="nav__toggle" id="navToggle" aria-label="Menü">
+                <span></span><span></span><span></span>
+            </button>
         </nav>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main -->
     <main class="main">
-        <!-- Hero Section -->
         <section class="hero">
             <h1 class="hero__title">Lernmaterialien für<br>Berufsbildung</h1>
             <p class="hero__subtitle">
-                Entdecken Sie unsere umfangreiche Sammlung an Lernmaterialien für Berufsschule, 
-                Berufsfachschule und Berufsoberschule. Sortiert nach Lernfeldern und Ausbildungsberufen.
+                Entdecke unsere Sammlung an Lernmaterialien in einer beruhigenden, 
+                konzentrationsfördernden Umgebung – optimiert für effektives Lernen.
             </p>
         </section>
 
-        <!-- Filter Section -->
+        <!-- Filter -->
         <section class="filter-section">
             <div class="filter-bar">
-                <button class="filter-btn active" data-filter="all">Alle Materialien</button>
-                
-                <div class="filter-dropdown" id="schulartDropdown">
-                    <button class="filter-dropdown__btn">
-                        Schulart
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                    </button>
-                    <div class="filter-dropdown__menu">
-                        <div class="filter-dropdown__item" data-value="berufsschule">Berufsschule</div>
-                        <div class="filter-dropdown__item" data-value="berufsfachschule">Berufsfachschule</div>
-                        <div class="filter-dropdown__item" data-value="bos">Berufsoberschule (BOS)</div>
-                        <div class="filter-dropdown__item" data-value="fos">Fachoberschule (FOS)</div>
-                    </div>
-                </div>
-
-                <div class="filter-dropdown" id="fachDropdown">
-                    <button class="filter-dropdown__btn">
-                        Fachbereich
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                    </button>
-                    <div class="filter-dropdown__menu">
-                        <div class="filter-dropdown__item" data-value="wirtschaft">Wirtschaft & Verwaltung</div>
-                        <div class="filter-dropdown__item" data-value="technik">Technik</div>
-                        <div class="filter-dropdown__item" data-value="sozial">Sozialwesen</div>
-                        <div class="filter-dropdown__item" data-value="gesundheit">Gesundheit</div>
-                        <div class="filter-dropdown__item" data-value="it">IT & Medien</div>
-                    </div>
-                </div>
-
-                <div class="filter-dropdown" id="formatDropdown">
-                    <button class="filter-dropdown__btn">
-                        Format
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9l6 6 6-6"></path>
-                        </svg>
-                    </button>
-                    <div class="filter-dropdown__menu">
-                        <div class="filter-dropdown__item" data-value="pdf">PDF-Dokumente</div>
-                        <div class="filter-dropdown__item" data-value="video">Video-Tutorials</div>
-                        <div class="filter-dropdown__item" data-value="quiz">Interaktive Quizze</div>
-                        <div class="filter-dropdown__item" data-value="praesentation">Präsentationen</div>
-                    </div>
-                </div>
+                <button class="filter-btn active">Alle Materialien</button>
+                <button class="filter-btn">Berufsschule</button>
+                <button class="filter-btn">Berufsfachschule</button>
+                <button class="filter-btn">BOS / FOS</button>
+                <button class="filter-btn">PDF</button>
+                <button class="filter-btn">Video</button>
             </div>
         </section>
 
-        <!-- Berufsschule Section -->
+        <!-- Categories -->
         <section class="categories-section">
             <div class="categories-container">
                 
@@ -944,19 +579,16 @@
                         <span class="category-group__count">24 Materialien</span>
                     </div>
 
-                    <!-- Lernfeld Tabs -->
                     <div class="lernfeld-tabs">
-                        <button class="lernfeld-tab active">Alle Lernfelder</button>
+                        <button class="lernfeld-tab active">Alle</button>
                         <button class="lernfeld-tab">LF 1</button>
                         <button class="lernfeld-tab">LF 2</button>
                         <button class="lernfeld-tab">LF 3</button>
                         <button class="lernfeld-tab">LF 4</button>
                         <button class="lernfeld-tab">LF 5</button>
-                        <button class="lernfeld-tab">LF 6</button>
                     </div>
 
                     <div class="materials-grid">
-                        <!-- Material Card 1 -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -965,13 +597,12 @@
                                 </div>
                                 <h3 class="material-card__title">Einführung in das Berufsfeld</h3>
                                 <p class="material-card__description">
-                                    Grundlagen der beruflichen Orientierung und Einführung in die Strukturen des Ausbildungsbetriebs.
+                                    Grundlagen der beruflichen Orientierung und Strukturen des Ausbildungsbetriebs.
                                 </p>
                                 <div class="material-card__meta">
                                     <span class="material-card__meta-item">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                             <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
-                                            <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path>
                                         </svg>
                                         PDF
                                     </span>
@@ -986,7 +617,6 @@
                             </div>
                         </article>
 
-                        <!-- Material Card 2 -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -995,7 +625,7 @@
                                 </div>
                                 <h3 class="material-card__title">Arbeitsabläufe planen</h3>
                                 <p class="material-card__description">
-                                    Video-Tutorial zur systematischen Planung und Organisation von Arbeitsabläufen im Betrieb.
+                                    Video-Tutorial zur systematischen Planung und Organisation von Arbeitsabläufen.
                                 </p>
                                 <div class="material-card__meta">
                                     <span class="material-card__meta-item">
@@ -1015,7 +645,6 @@
                             </div>
                         </article>
 
-                        <!-- Material Card 3 -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -1045,32 +674,25 @@
                             </div>
                         </article>
 
-                        <!-- Material Card 4 -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
                                     <span class="material-card__badge">LF 4</span>
                                     <span class="material-card__type">📊</span>
                                 </div>
-                                <h3 class="material-card__title">Präsentation: Kundenberatung</h3>
+                                <h3 class="material-card__title">Kundenberatung</h3>
                                 <p class="material-card__description">
-                                    PowerPoint-Vorlage für professionelle Kundenberatungsgespräche und Verkaufstechniken.
+                                    Präsentation für professionelle Kundenberatungsgespräche und Verkaufstechniken.
                                 </p>
                                 <div class="material-card__meta">
                                     <span class="material-card__meta-item">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                                            <rect x="2" y="3" width="20" height="14" rx="2"></rect>
                                             <line x1="8" y1="21" x2="16" y2="21"></line>
-                                            <line x1="12" y1="17" x2="12" y2="21"></line>
                                         </svg>
                                         Präsentation
                                     </span>
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
-                                        </svg>
-                                        32 Folien
-                                    </span>
+                                    <span class="material-card__meta-item">32 Folien</span>
                                 </div>
                             </div>
                         </article>
@@ -1086,7 +708,6 @@
                     </div>
 
                     <div class="materials-grid">
-                        <!-- Material Card -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -1095,27 +716,15 @@
                                 </div>
                                 <h3 class="material-card__title">Wirtschafts- und Sozialkunde</h3>
                                 <p class="material-card__description">
-                                    Umfassendes Skript zu volkswirtschaftlichen Grundlagen und sozialen Sicherungssystemen.
+                                    Umfassendes Skript zu volkswirtschaftlichen Grundlagen und Sicherungssystemen.
                                 </p>
                                 <div class="material-card__meta">
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
-                                        </svg>
-                                        PDF
-                                    </span>
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 6v6l4 2"></path>
-                                        </svg>
-                                        45 Min
-                                    </span>
+                                    <span class="material-card__meta-item">PDF</span>
+                                    <span class="material-card__meta-item">45 Min</span>
                                 </div>
                             </div>
                         </article>
 
-                        <!-- Material Card -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -1124,22 +733,11 @@
                                 </div>
                                 <h3 class="material-card__title">Buchführung Grundlagen</h3>
                                 <p class="material-card__description">
-                                    Videotuorial-Reihe: Von der Inventur bis zur Bilanz in 10 verständlichen Lektionen.
+                                    Video-Reihe: Von der Inventur bis zur Bilanz in 10 Lektionen.
                                 </p>
                                 <div class="material-card__meta">
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                                        </svg>
-                                        Video-Reihe
-                                    </span>
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 6v6l4 2"></path>
-                                        </svg>
-                                        10 Videos
-                                    </span>
+                                    <span class="material-card__meta-item">Video</span>
+                                    <span class="material-card__meta-item">10 Videos</span>
                                 </div>
                             </div>
                         </article>
@@ -1155,7 +753,6 @@
                     </div>
 
                     <div class="materials-grid">
-                        <!-- Material Card -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -1164,27 +761,15 @@
                                 </div>
                                 <h3 class="material-card__title">Fachabitur-Vorbereitung BWR</h3>
                                 <p class="material-card__description">
-                                    Kompakte Zusammenfassung aller prüfungsrelevanten Themen für das Fachabitur in BWR.
+                                    Kompakte Zusammenfassung aller prüfungsrelevanten Themen für das Fachabitur.
                                 </p>
                                 <div class="material-card__meta">
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"></path>
-                                        </svg>
-                                        PDF
-                                    </span>
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 6v6l4 2"></path>
-                                        </svg>
-                                        60 Seiten
-                                    </span>
+                                    <span class="material-card__meta-item">PDF</span>
+                                    <span class="material-card__meta-item">60 Seiten</span>
                                 </div>
                             </div>
                         </article>
 
-                        <!-- Material Card -->
                         <article class="material-card">
                             <div class="material-card__inner">
                                 <div class="material-card__header">
@@ -1193,29 +778,16 @@
                                 </div>
                                 <h3 class="material-card__title">Abitur-Trainer Mathematik</h3>
                                 <p class="material-card__description">
-                                    Interaktive Übungsaufgaben zur Vorbereitung auf das Mathematik-Abitur mit Lösungswegen.
+                                    Interaktive Übungsaufgaben zur Vorbereitung auf das Abitur mit Lösungswegen.
                                 </p>
                                 <div class="material-card__meta">
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 11l3 3L22 4"></path>
-                                            <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"></path>
-                                        </svg>
-                                        Übungen
-                                    </span>
-                                    <span class="material-card__meta-item">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <path d="M12 6v6l4 2"></path>
-                                        </svg>
-                                        50 Aufgaben
-                                    </span>
+                                    <span class="material-card__meta-item">Übungen</span>
+                                    <span class="material-card__meta-item">50 Aufgaben</span>
                                 </div>
                             </div>
                         </article>
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
@@ -1225,458 +797,225 @@
         <div class="footer__container">
             <div class="footer__grid">
                 <div class="footer__brand">
-                    <span class="footer__logo">Sunset Waves</span>
+                    <div class="footer__logo"><span>NATUR</span> UDL</div>
                     <p class="footer__description">
-                        Wir entwickeln intelligente KI-Lösungen für persönliches Wachstum und berufliche Entwicklung. 
-                        Unsere Mission ist es, Menschen zu befähigen, ihr volles Potenzial zu entfalten.
+                        Wissenschaftlich fundierte Lernumgebungen mit biophilem Design 
+                        für optimale Lernatmosphäre.
                     </p>
-                    <div class="footer__social">
-                        <a href="#" class="footer__social-link" aria-label="LinkedIn">in</a>
-                        <a href="#" class="footer__social-link" aria-label="Twitter/X">𝕏</a>
-                        <a href="#" class="footer__social-link" aria-label="Instagram">📷</a>
-                        <a href="#" class="footer__social-link" aria-label="YouTube">▶</a>
-                    </div>
                 </div>
-
-                <div class="footer__column">
-                    <h4 class="footer__column-title">Services</h4>
+                <div>
+                    <h4 class="footer__column-title">Angebote</h4>
                     <ul class="footer__links">
                         <li><a href="chatbots.html">KI-Assistenten</a></li>
                         <li><a href="lernmaterialien.html">Lernmaterialien</a></li>
                         <li><a href="index.html#services">Beratung</a></li>
-                        <li><a href="#">Newsletter</a></li>
                     </ul>
                 </div>
-
-                <div class="footer__column">
+                <div>
                     <h4 class="footer__column-title">Informationen</h4>
                     <ul class="footer__links">
                         <li><a href="index.html#about">Über uns</a></li>
+                        <li><a href="#">Wissenschaft</a></li>
                         <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Karriere</a></li>
                     </ul>
                 </div>
-
-                <div class="footer__column">
+                <div>
                     <h4 class="footer__column-title">Kontakt</h4>
                     <ul class="footer__links">
                         <li><a href="index.html#contact">Kontaktformular</a></li>
-                        <li><a href="mailto:info@sunsetwaves.de">info@sunsetwaves.de</a></li>
-                        <li><a href="tel:+491234567890">+49 123 456 7890</a></li>
-                        <li><a href="#">Support</a></li>
+                        <li><a href="mailto:info@natur-udl.de">info@natur-udl.de</a></li>
                     </ul>
                 </div>
             </div>
-
             <div class="footer__bottom">
-                <p class="footer__copyright">&copy; 2025 Sunset Waves. Alle Rechte vorbehalten.</p>
+                <p class="footer__copyright">&copy; 2025 NATUR UDL. Alle Rechte vorbehalten.</p>
                 <div class="footer__legal">
                     <a href="#">Impressum</a>
                     <a href="#">Datenschutz</a>
                     <a href="#">AGB</a>
-                    <a href="#">Cookie-Einstellungen</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- ========================================
-         WEBGL WAVE BACKGROUND SHADER
-         ======================================== -->
+    <!-- WebGL Grass Background -->
     <script>
     (function() {
         'use strict';
 
-        const VERTEX_SHADER = `
-            attribute vec2 a_position;
-            void main() {
-                gl_Position = vec4(a_position, 0.0, 1.0);
-            }
-        `;
+        const VS = `attribute vec2 a_position; void main() { gl_Position = vec4(a_position, 0.0, 1.0); }`;
 
-        const FRAGMENT_SHADER = `
+        const FS = `
+            #ifdef GL_ES
             precision highp float;
-            
+            #endif
             uniform vec2 u_resolution;
             uniform float u_time;
             uniform vec2 u_pointer;
             uniform float u_pointerInfluence;
-            
-            const vec3 WATER_DEEP = vec3(0.02, 0.05, 0.15);
-            const vec3 WATER_MID = vec3(0.04, 0.10, 0.25);
-            const vec3 WATER_RIM = vec3(0.08, 0.18, 0.35);
-            
+
+            const vec3 SKY_TOP = vec3(0.89, 0.94, 0.97);
+            const vec3 SKY_MID = vec3(0.72, 0.83, 0.89);
+            const vec3 GRASS_LIGHT = vec3(0.66, 0.78, 0.53);
+            const vec3 GRASS_MID = vec3(0.49, 0.71, 0.42);
+            const vec3 GRASS_DARK = vec3(0.35, 0.60, 0.29);
+            const float HORIZON = 0.35;
+
             float hash(vec2 p) {
                 vec3 p3 = fract(vec3(p.xyx) * 0.1031);
                 p3 += dot(p3, p3.yzx + 33.33);
                 return fract((p3.x + p3.y) * p3.z);
             }
-            
+
             float noise(vec2 p) {
-                vec2 i = floor(p);
-                vec2 f = fract(p);
-                vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
-                
-                float a = hash(i);
-                float b = hash(i + vec2(1.0, 0.0));
-                float c = hash(i + vec2(0.0, 1.0));
-                float d = hash(i + vec2(1.0, 1.0));
-                
-                return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+                vec2 i = floor(p), f = fract(p);
+                vec2 u = f * f * (3.0 - 2.0 * f);
+                return mix(mix(hash(i), hash(i + vec2(1,0)), u.x),
+                           mix(hash(i + vec2(0,1)), hash(i + vec2(1,1)), u.x), u.y);
             }
-            
-            vec2 domainWarp(vec2 p, float time) {
-                float wx = noise(p * 0.9 + time * 0.1);
-                float wy = noise(p * 0.9 + vec2(5.2, 1.3) + time * 0.1);
-                return p + vec2(wx, wy) * 0.35;
-            }
-            
-            float fbm(vec2 p, float time) {
-                float value = 0.0;
-                float amplitude = 0.5;
-                float frequency = 1.35;
-                
-                p = domainWarp(p, time);
-                
+
+            float fbm(vec2 p, int oct) {
+                float v = 0.0, a = 0.5;
                 for (int i = 0; i < 5; i++) {
-                    vec2 dir = vec2(0.85, 0.25);
-                    vec2 animatedP = p + dir * time * 0.12 * float(i + 1) * 0.3;
-                    value += amplitude * noise(animatedP * frequency);
-                    frequency *= 2.05;
-                    amplitude *= 0.55;
+                    if (i >= oct) break;
+                    v += a * noise(p); p *= 2.0; a *= 0.5;
                 }
-                
-                return pow(abs(value), 1.25);
-            }
-            
-            float secondarySwell(vec2 p, float time) {
-                vec2 animatedP = p + vec2(-0.2, 0.95) * time * 0.06;
-                return noise(animatedP * 2.0) * 0.35;
-            }
-
-            float getWaveHeight(vec2 uv, float time) {
-                return fbm(uv * 3.0, time) + secondarySwell(uv * 2.0, time);
-            }
-            
-            vec3 calcNormal(vec2 uv, float time) {
-                float eps = 0.0025;
-                float hL = getWaveHeight(uv - vec2(eps, 0.0), time);
-                float hR = getWaveHeight(uv + vec2(eps, 0.0), time);
-                float hD = getWaveHeight(uv - vec2(0.0, eps), time);
-                float hU = getWaveHeight(uv + vec2(0.0, eps), time);
-                
-                return normalize(vec3((hL - hR) * 1.35, (hD - hU) * 1.35, 1.0));
-            }
-
-            float fresnel(vec3 viewDir, vec3 normal, float power) {
-                return pow(1.0 - max(dot(viewDir, normal), 0.0), power);
-            }
-
-            float vignette(vec2 uv, float strength, float radius) {
-                float dist = length(uv - 0.5);
-                return 1.0 - smoothstep(radius, radius + 0.5, dist) * strength;
-            }
-            
-            float filmGrain(vec2 uv, float time) {
-                return (hash(uv * 1000.0 + time * 100.0) - 0.5) * 2.0;
-            }
-            
-            vec3 cheapBloom(vec3 color, float threshold, float intensity) {
-                float brightness = dot(color, vec3(0.2126, 0.7152, 0.0722));
-                float bloom = max(0.0, brightness - threshold);
-                return color + color * bloom * intensity;
+                return v;
             }
 
             void main() {
                 vec2 uv = gl_FragCoord.xy / u_resolution.xy;
                 float aspect = u_resolution.x / u_resolution.y;
-                vec2 uvAspect = vec2(uv.x * aspect, uv.y);
-                
                 vec2 pointer = u_pointer / u_resolution.xy;
-                pointer.x *= aspect;
-                
                 float time = u_time;
-                
-                float perspective = pow(1.0 - uv.y, 0.8);
-                vec2 waterUV = uvAspect * (1.0 + perspective * 1.5);
-                
-                float waveHeight = getWaveHeight(waterUV, time);
-                vec3 normal = calcNormal(waterUV, time);
-                vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
-                
-                vec3 waterColor = mix(WATER_DEEP, WATER_MID, uv.y * 0.8);
-                waterColor = mix(waterColor, WATER_RIM, waveHeight * 0.4);
-                
-                float fres = fresnel(viewDir, normal, 5.0) * 0.3;
-                waterColor = mix(waterColor, WATER_RIM * 1.2, fres);
-                
-                float pointerDist = length(uvAspect - pointer);
-                float pointerInfluence = smoothstep(0.45, 0.0, pointerDist) * u_pointerInfluence;
-                
-                float shimmerBoost = 1.0 + pointerInfluence * 0.6;
-                float flicker = 1.0 + sin(time * 4.0 + waveHeight * 15.0) * 0.05 * pointerInfluence;
-                float sparkle = smoothstep(0.6, 0.9, waveHeight) * pointerInfluence * 0.4;
-                
-                vec3 shimmerColor = vec3(0.95, 0.75, 0.45);
-                vec3 sparkleColor = vec3(1.0, 0.85, 0.6);
-                
-                float waveCrests = smoothstep(0.35, 0.75, waveHeight);
-                waterColor += shimmerColor * waveCrests * pointerInfluence * shimmerBoost * flicker * 0.15;
-                waterColor += sparkleColor * sparkle * flicker * 0.25;
-                
-                float outerGlow = smoothstep(0.6, 0.15, pointerDist) * u_pointerInfluence * 0.06;
-                waterColor += shimmerColor * outerGlow * 0.5;
-                
-                vec3 finalColor = waterColor;
-                
-                float vig = vignette(uv, 0.25, 0.75);
-                finalColor *= vig;
-                
-                float grain = filmGrain(uv, time) * 0.015;
-                finalColor += grain;
-                
-                finalColor = cheapBloom(finalColor, 0.6, 0.15);
-                finalColor = min(finalColor, vec3(0.85));
-                
-                gl_FragColor = vec4(finalColor, 1.0);
+                vec3 color;
+
+                if (uv.y > HORIZON) {
+                    float t = (uv.y - HORIZON) / (1.0 - HORIZON);
+                    color = mix(vec3(0.82, 0.88, 0.82), SKY_MID, pow(t, 0.7) * 0.6);
+                    color = mix(color, SKY_TOP, pow(t, 1.5));
+                    color += smoothstep(0.4, 0.6, fbm(vec2(uv.x * 2.0 + time * 0.01, uv.y * 3.0), 3)) * 0.06;
+                } else {
+                    float grassT = 1.0 - uv.y / HORIZON;
+                    vec2 grassUV = vec2(uv.x * aspect, pow(grassT, 0.5));
+                    float groundNoise = fbm(grassUV * 8.0, 3);
+                    color = mix(GRASS_DARK, GRASS_MID, groundNoise);
+                    float wind = sin(time * 0.8 + grassUV.x * 5.0) * 0.02;
+                    float pointerDist = length(uv - pointer);
+                    float mouseEffect = smoothstep(0.25, 0.0, pointerDist) * u_pointerInfluence * 0.08;
+                    float detail = fbm(grassUV * 15.0 + vec2(wind + mouseEffect, 0.0), 4);
+                    color = mix(color, GRASS_LIGHT, detail * 0.4);
+                    color = mix(color, vec3(0.53, 0.66, 0.47), grassT * 0.3);
+                    color = mix(color, vec3(0.82, 0.88, 0.82), grassT * 0.15);
+                }
+
+                color *= 1.0 - length(uv - 0.5) * 0.2;
+                color += (hash(uv * 1000.0 + time) - 0.5) * 0.015;
+                gl_FragColor = vec4(color, 1.0);
             }
         `;
 
-        const canvas = document.getElementById('waveCanvas');
+        const canvas = document.getElementById('grassCanvas');
         if (!canvas) return;
-        
+
         let gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
-        
         if (!gl) {
-            canvas.style.display = 'none';
-            const fallback = document.createElement('div');
-            fallback.className = 'wave-fallback';
-            document.body.insertBefore(fallback, document.body.firstChild);
+            canvas.style.background = 'linear-gradient(180deg, #e3f0f7 0%, #b8d4e3 25%, #a8c686 55%, #7db46c 100%)';
             return;
         }
 
-        function compileShader(source, type) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, source);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                gl.deleteShader(shader);
-                return null;
-            }
-            return shader;
+        function compile(src, type) {
+            const s = gl.createShader(type);
+            gl.shaderSource(s, src);
+            gl.compileShader(s);
+            return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null;
         }
 
-        const vertexShader = compileShader(VERTEX_SHADER, gl.VERTEX_SHADER);
-        const fragmentShader = compileShader(FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
-        
-        if (!vertexShader || !fragmentShader) return;
+        const vs = compile(VS, gl.VERTEX_SHADER);
+        const fs = compile(FS, gl.FRAGMENT_SHADER);
+        if (!vs || !fs) return;
 
-        const program = gl.createProgram();
-        gl.attachShader(program, vertexShader);
-        gl.attachShader(program, fragmentShader);
-        gl.linkProgram(program);
+        const prog = gl.createProgram();
+        gl.attachShader(prog, vs);
+        gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return;
+        gl.useProgram(prog);
 
-        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return;
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,-1,1,1,-1,1,1]), gl.STATIC_DRAW);
 
-        gl.useProgram(program);
+        const pos = gl.getAttribLocation(prog, 'a_position');
+        gl.enableVertexAttribArray(pos);
+        gl.vertexAttribPointer(pos, 2, gl.FLOAT, false, 0, 0);
 
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-            -1, -1,  1, -1,  -1, 1,
-            -1,  1,  1, -1,   1, 1
-        ]), gl.STATIC_DRAW);
-
-        const positionLoc = gl.getAttribLocation(program, 'a_position');
-        gl.enableVertexAttribArray(positionLoc);
-        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
-
-        const uniforms = {
-            resolution: gl.getUniformLocation(program, 'u_resolution'),
-            time: gl.getUniformLocation(program, 'u_time'),
-            pointer: gl.getUniformLocation(program, 'u_pointer'),
-            pointerInfluence: gl.getUniformLocation(program, 'u_pointerInfluence')
+        const u = {
+            res: gl.getUniformLocation(prog, 'u_resolution'),
+            time: gl.getUniformLocation(prog, 'u_time'),
+            ptr: gl.getUniformLocation(prog, 'u_pointer'),
+            inf: gl.getUniformLocation(prog, 'u_pointerInfluence')
         };
 
-        let width = 0, height = 0;
-        let pointerX = 0, pointerY = 0;
-        let targetPointerX = 0, targetPointerY = 0;
-        let isRunning = true;
-        let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        let w = 0, h = 0, px = 0, py = 0, tx = 0, ty = 0, run = true;
+        const rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
         function resize() {
-            const dpr = Math.min(window.devicePixelRatio || 1, 2);
-            width = window.innerWidth;
-            height = window.innerHeight;
-            
-            canvas.width = width * dpr;
-            canvas.height = height * dpr;
-            canvas.style.width = width + 'px';
-            canvas.style.height = height + 'px';
-            
+            const dpr = Math.min(devicePixelRatio || 1, 2);
+            w = innerWidth; h = innerHeight;
+            canvas.width = w * dpr; canvas.height = h * dpr;
+            canvas.style.width = w + 'px'; canvas.style.height = h + 'px';
             gl.viewport(0, 0, canvas.width, canvas.height);
-            gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
-            
-            if (pointerX === 0 && pointerY === 0) {
-                pointerX = targetPointerX = width * 0.5;
-                pointerY = targetPointerY = height * 0.5;
-            }
+            gl.uniform2f(u.res, canvas.width, canvas.height);
+            if (!px && !py) { px = tx = w * 0.5; py = ty = h * 0.7; }
         }
 
-        function onPointerMove(e) {
-            targetPointerX = e.clientX || (e.touches && e.touches[0].clientX) || targetPointerX;
-            targetPointerY = e.clientY || (e.touches && e.touches[0].clientY) || targetPointerY;
+        function move(e) {
+            tx = e.clientX || (e.touches?.[0]?.clientX) || tx;
+            ty = e.clientY || (e.touches?.[0]?.clientY) || ty;
         }
 
-        window.addEventListener('resize', resize);
-        window.addEventListener('mousemove', onPointerMove);
-        window.addEventListener('touchmove', onPointerMove, { passive: true });
-
-        document.addEventListener('visibilitychange', () => {
-            isRunning = !document.hidden;
-            if (isRunning) requestAnimationFrame(render);
-        });
-
+        addEventListener('resize', resize);
+        addEventListener('mousemove', move);
+        addEventListener('touchmove', move, {passive: true});
+        document.addEventListener('visibilitychange', () => { run = !document.hidden; if (run) requestAnimationFrame(render); });
         resize();
 
-        function render(timestamp) {
-            if (!isRunning) return;
-            
-            const time = timestamp * 0.001 * (reducedMotion ? 0.35 : 1.0);
-            const smoothing = reducedMotion ? 0.05 : 0.12;
-            pointerX += (targetPointerX - pointerX) * smoothing;
-            pointerY += (targetPointerY - pointerY) * smoothing;
-            
-            gl.uniform1f(uniforms.time, time);
-            gl.uniform2f(uniforms.pointer, pointerX * (canvas.width / width), 
-                        (height - pointerY) * (canvas.height / height));
-            gl.uniform1f(uniforms.pointerInfluence, reducedMotion ? 0.5 : 1.0);
-            
+        function render(t) {
+            if (!run) return;
+            const time = t * 0.001 * (rm ? 0.2 : 1);
+            const sm = rm ? 0.05 : 0.08;
+            px += (tx - px) * sm; py += (ty - py) * sm;
+            gl.uniform1f(u.time, time);
+            gl.uniform2f(u.ptr, px * (canvas.width / w), (h - py) * (canvas.height / h));
+            gl.uniform1f(u.inf, rm ? 0.3 : 1.0);
             gl.drawArrays(gl.TRIANGLES, 0, 6);
             requestAnimationFrame(render);
         }
-
         requestAnimationFrame(render);
     })();
 
-    // Navigation Toggle
-    (function() {
-        const toggle = document.getElementById('navToggle');
-        const menu = document.querySelector('.nav__menu');
-        
-        if (toggle && menu) {
-            toggle.addEventListener('click', () => menu.classList.toggle('active'));
-        }
-    })();
-
-    // Search Functionality
-    (function() {
-        const search = document.getElementById('search');
-        const searchToggle = document.getElementById('searchToggle');
-        const searchInput = document.getElementById('searchInput');
-        const searchClose = document.getElementById('searchClose');
-
-        if (!search || !searchToggle || !searchInput) return;
-
-        searchToggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            search.classList.add('active');
-            setTimeout(() => searchInput.focus(), 100);
-        });
-
-        if (searchClose) {
-            searchClose.addEventListener('click', (e) => {
-                e.preventDefault();
-                search.classList.remove('active');
-                searchInput.value = '';
-            });
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && search.classList.contains('active')) {
-                search.classList.remove('active');
-                searchInput.value = '';
-            }
-        });
-
-        searchInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                const query = searchInput.value.trim();
-                if (query) {
-                    alert('Suche nach: "' + query + '"\n\nDiese Funktion wird bald verfügbar sein!');
-                    search.classList.remove('active');
-                    searchInput.value = '';
-                }
-            }
-        });
-
-        document.addEventListener('click', (e) => {
-            if (search.classList.contains('active') && !search.contains(e.target)) {
-                search.classList.remove('active');
-                searchInput.value = '';
-            }
-        });
-    })();
-
-    // Filter Dropdowns
-    (function() {
-        const dropdowns = document.querySelectorAll('.filter-dropdown');
-        
-        dropdowns.forEach(dropdown => {
-            const btn = dropdown.querySelector('.filter-dropdown__btn');
-            const items = dropdown.querySelectorAll('.filter-dropdown__item');
-            
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                dropdowns.forEach(d => {
-                    if (d !== dropdown) d.classList.remove('open');
-                });
-                dropdown.classList.toggle('open');
-            });
-            
-            items.forEach(item => {
-                item.addEventListener('click', () => {
-                    items.forEach(i => i.classList.remove('active'));
-                    item.classList.add('active');
-                    btn.childNodes[0].textContent = item.textContent + ' ';
-                    dropdown.classList.remove('open');
-                });
-            });
-        });
-        
-        document.addEventListener('click', () => {
-            dropdowns.forEach(d => d.classList.remove('open'));
-        });
-    })();
+    // Nav Toggle
+    document.getElementById('navToggle')?.addEventListener('click', function() {
+        document.querySelector('.nav__menu')?.classList.toggle('active');
+    });
 
     // Filter Buttons
-    (function() {
-        const filterBtns = document.querySelectorAll('.filter-btn');
-        
-        filterBtns.forEach(btn => {
-            btn.addEventListener('click', () => {
-                filterBtns.forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         });
-    })();
+    });
 
     // Lernfeld Tabs
-    (function() {
-        const tabs = document.querySelectorAll('.lernfeld-tab');
-        
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const parent = tab.closest('.category-group');
-                const siblingTabs = parent.querySelectorAll('.lernfeld-tab');
-                siblingTabs.forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-            });
+    document.querySelectorAll('.lernfeld-tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            const parent = tab.closest('.category-group');
+            parent.querySelectorAll('.lernfeld-tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
         });
-    })();
+    });
     </script>
 </body>
 </html>
-

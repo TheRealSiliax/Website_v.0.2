@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Moderne Website mit KI-Chatbot Integration und dynamischem Sonnenuntergangs-Hintergrund">
-    <title>Sunset Shimmer Waves</title>
+    <meta name="description" content="NATUR UDL - Lernplattform mit biophilem Design für optimale Lernatmosphäre">
+    <title>NATUR UDL - Lernen in natürlicher Atmosphäre</title>
     
-    <!-- Fonts - Inter für moderne Typografie -->
+    <!-- Fonts - Merriweather für Ruhe, Lato für Klarheit -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Lato:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* ========================================
-           CSS RESET & BASE
+           CSS RESET & BIOPHILIC DESIGN SYSTEM
+           Basierend auf wissenschaftlichen Erkenntnissen:
+           - Cognitive Load Theory
+           - Biophilia Hypothese
+           - Attention Restoration Theory
            ======================================== */
         *, *::before, *::after {
             margin: 0;
@@ -22,9 +26,64 @@
         }
 
         :root {
-            --color-primary: #ff7a3d;
-            --color-primary-dark: #e65a1d;
-            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            /* ========================================
+               BIOPHILE FARBPALETTE (Bio-Regeneration)
+               Salbeigrün, Erdtöne, natürliche Akzente
+               ======================================== */
+            
+            /* Primär: Natürliche Grüntöne */
+            --color-grass-light: #a8c686;
+            --color-grass-mid: #7db46c;
+            --color-grass-dark: #5a9a4a;
+            --color-sage: #87a878;
+            --color-moss: #6b8e5f;
+            
+            /* Sekundär: Erdtöne & Himmel */
+            --color-earth-warm: #c4a77d;
+            --color-earth-deep: #8b6f47;
+            --color-sand: #e8dcc4;
+            --color-sky-soft: #b8d4e3;
+            --color-sky-pale: #e3f0f7;
+            
+            /* Hintergrund: Sanfte Naturtöne */
+            --color-bg-cream: #f7f5f0;
+            --color-bg-warm: #faf8f3;
+            --color-bg-soft: #f0ede5;
+            
+            /* Text: WCAG-konform (mind. 4.5:1 Kontrast) */
+            --color-text-primary: #2d3a2e;
+            --color-text-secondary: #4a5a4b;
+            --color-text-muted: #6b7a6c;
+            
+            /* Akzent: Warmes Gold/Orange für CTAs */
+            --color-accent: #d4a574;
+            --color-accent-hover: #c4945a;
+            --color-accent-glow: rgba(212, 165, 116, 0.4);
+            
+            /* Glassmorphism für Sections */
+            --glass-bg: rgba(247, 245, 240, 0.85);
+            --glass-border: rgba(135, 168, 120, 0.2);
+            
+            /* Typografie */
+            --font-heading: 'Merriweather', Georgia, serif;
+            --font-body: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+            
+            /* Spacing (großzügig für Whitespace) */
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 1.5rem;
+            --spacing-lg: 2.5rem;
+            --spacing-xl: 4rem;
+            
+            /* Organische Radien */
+            --radius-soft: 12px;
+            --radius-organic: 20px;
+            --radius-full: 9999px;
+            
+            /* Soft UI Shadows */
+            --shadow-soft: 0 4px 20px rgba(45, 58, 46, 0.08);
+            --shadow-hover: 0 8px 30px rgba(45, 58, 46, 0.12);
+            --shadow-inset: inset 0 2px 4px rgba(45, 58, 46, 0.06);
         }
 
         html {
@@ -32,21 +91,25 @@
         }
 
         body {
-            font-family: var(--font-primary);
+            font-family: var(--font-body);
             font-size: 16px;
-            line-height: 1.6;
-            color: white;
+            line-height: 1.7;
+            color: var(--color-text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            /* Fallback Gradient */
-            background: radial-gradient(circle at 60% 45%, rgba(255,122,61,0.35), transparent 45%), 
-                        linear-gradient(180deg, #1a0f2e 0%, #5b245e 35%, #0b1630 70%, #060814 100%);
+            /* Fallback Gradient - sanfter Himmel über Wiese */
+            background: linear-gradient(180deg, 
+                var(--color-sky-pale) 0%, 
+                var(--color-sky-soft) 20%,
+                var(--color-grass-light) 60%, 
+                var(--color-grass-mid) 100%);
         }
 
         /* ========================================
-           WAVE BACKGROUND CANVAS
+           GRASS BACKGROUND CANVAS
+           WebGL Wiesen-Hintergrund mit Interaktion
            ======================================== */
-        #waveCanvas {
+        #grassCanvas {
             position: fixed;
             top: 0;
             left: 0;
@@ -56,26 +119,23 @@
             pointer-events: none;
         }
 
-        /* Fallback für CSS-Animation wenn WebGL nicht verfügbar */
-        .wave-fallback {
+        /* Fallback für CSS wenn WebGL nicht verfügbar */
+        .grass-fallback {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: -1;
-            background: radial-gradient(circle at 60% 45%, rgba(255,122,61,0.35), transparent 45%), 
-                        linear-gradient(180deg, #1a0f2e 0%, #5b245e 35%, #0b1630 70%, #060814 100%);
-            animation: subtleShift 18s ease-in-out infinite;
-        }
-
-        @keyframes subtleShift {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            background: linear-gradient(180deg, 
+                #e3f0f7 0%, 
+                #b8d4e3 25%,
+                #a8c686 55%, 
+                #7db46c 100%);
         }
 
         /* ========================================
-           HEADER & NAVIGATION
+           HEADER & NAVIGATION (Biophil)
            ======================================== */
         .header {
             position: fixed;
@@ -83,10 +143,11 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(10, 13, 46, 0.7);
+            background: rgba(247, 245, 240, 0.92);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: 0 2px 20px rgba(45, 58, 46, 0.05);
         }
 
         .nav {
@@ -99,11 +160,16 @@
         }
 
         .nav__logo a {
-            font-size: 1.25rem;
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
             font-weight: 700;
-            color: white;
+            color: var(--color-text-primary);
             text-decoration: none;
-            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: -0.02em;
+        }
+
+        .nav__logo span {
+            color: var(--color-sage);
         }
 
         .nav__menu {
@@ -113,21 +179,39 @@
         }
 
         .nav__menu a {
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--color-text-secondary);
             text-decoration: none;
             font-weight: 500;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
+            padding: 0.5rem 0;
+            position: relative;
+        }
+
+        .nav__menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--color-sage);
+            transition: width 0.3s ease;
+            border-radius: 1px;
         }
 
         .nav__menu a:hover {
-            color: white;
-            text-shadow: 0 0 20px rgba(255, 150, 50, 0.8);
+            color: var(--color-text-primary);
+        }
+
+        .nav__menu a:hover::after {
+            width: 100%;
         }
 
         .nav__toggle {
             display: none;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
             background: none;
             border: none;
             cursor: pointer;
@@ -137,7 +221,9 @@
         .nav__toggle span {
             width: 24px;
             height: 2px;
-            background-color: white;
+            background-color: var(--color-text-primary);
+            border-radius: 1px;
+            transition: 0.3s ease;
         }
 
         /* Search Component */
@@ -158,7 +244,7 @@
             border: none;
             cursor: pointer;
             padding: 0.5rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--color-text-secondary);
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
@@ -166,7 +252,7 @@
         }
 
         .search__toggle:hover {
-            color: white;
+            color: var(--color-text-primary);
             transform: scale(1.1);
         }
 
@@ -182,16 +268,15 @@
             transform: translateY(-50%);
             display: flex;
             align-items: center;
-            background: rgba(10, 13, 46, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
+            background: var(--color-bg-warm);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-full);
             overflow: hidden;
             width: 0;
             opacity: 0;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             pointer-events: none;
+            box-shadow: var(--shadow-soft);
         }
 
         .search.active .search__input-wrapper {
@@ -205,18 +290,18 @@
             padding: 0.65rem 1rem;
             background: transparent;
             border: none;
-            color: white;
+            color: var(--color-text-primary);
             font-size: 0.9rem;
             font-family: inherit;
             outline: none;
         }
 
         .search__input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--color-text-muted);
         }
 
         .search__submit {
-            background: var(--color-primary);
+            background: var(--color-sage);
             border: none;
             padding: 0.65rem 1rem;
             cursor: pointer;
@@ -228,12 +313,7 @@
         }
 
         .search__submit:hover {
-            background: var(--color-primary-dark);
-        }
-
-        .search__submit svg {
-            width: 16px;
-            height: 16px;
+            background: var(--color-moss);
         }
 
         .search__close {
@@ -241,31 +321,16 @@
             border: none;
             padding: 0.5rem;
             cursor: pointer;
-            color: rgba(255, 255, 255, 0.6);
+            color: var(--color-text-muted);
             display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: color 0.3s ease;
         }
 
         .search__close:hover {
-            color: white;
-        }
-
-        @media (max-width: 768px) {
-            .search.active .search__input-wrapper {
-                position: fixed;
-                top: 70px;
-                left: 1rem;
-                right: 1rem;
-                width: auto;
-                transform: none;
-                border-radius: 12px;
-            }
+            color: var(--color-text-primary);
         }
 
         /* ========================================
-           HERO SECTION
+           HERO SECTION (Minimalistisch, Biophil)
            ======================================== */
         .hero {
             min-height: 100vh;
@@ -273,36 +338,59 @@
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 6rem 1rem;
+            padding: 8rem 1rem 6rem;
+            position: relative;
         }
 
         .hero__content {
             position: relative;
             z-index: 1;
+            max-width: 700px;
         }
 
         .hero__title {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            font-weight: 800;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
-            letter-spacing: -0.02em;
+            font-family: var(--font-heading);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--color-text-primary);
+            letter-spacing: -0.03em;
+            line-height: 1.2;
             animation: fadeInUp 1s ease-out;
+            text-shadow: 0 2px 20px rgba(255, 255, 255, 0.5);
         }
 
         .hero__subtitle {
-            font-size: clamp(1.1rem, 2vw, 1.5rem);
-            margin-bottom: 1.5rem;
-            opacity: 0.95;
-            text-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+            font-size: clamp(1rem, 2vw, 1.25rem);
+            margin-bottom: 1rem;
+            color: var(--color-text-secondary);
+            line-height: 1.8;
             animation: fadeInUp 1s ease-out 0.2s backwards;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .hero__hint {
             font-size: 0.9rem;
-            opacity: 0.7;
+            color: var(--color-text-muted);
             margin-bottom: 2rem;
             animation: fadeInUp 1s ease-out 0.4s backwards;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .hero__hint svg {
+            width: 18px;
+            height: 18px;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
         }
 
         @keyframes fadeInUp {
@@ -317,175 +405,199 @@
         }
 
         /* ========================================
-           BUTTONS
+           BUTTONS (Organisch, Soft UI)
            ======================================== */
         .btn {
-            display: inline-block;
-            padding: 0.75rem 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
             font-size: 1rem;
             font-weight: 600;
+            font-family: inherit;
             border: none;
-            border-radius: 8px;
+            border-radius: var(--radius-organic);
             cursor: pointer;
             text-decoration: none;
             transition: all 0.3s ease;
             animation: fadeInUp 1s ease-out 0.6s backwards;
         }
 
-        .btn--glow {
-            background: linear-gradient(135deg, #ff7a3d 0%, #ff8a4a 100%);
+        .btn--nature {
+            background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-earth-warm) 100%);
             color: white;
-            box-shadow: 0 4px 20px rgba(255, 122, 61, 0.4);
+            box-shadow: 0 4px 20px var(--color-accent-glow);
         }
 
-        .btn--glow:hover {
-            background: linear-gradient(135deg, #ff8a4d 0%, #ff9a5a 100%);
-            box-shadow: 0 6px 30px rgba(255, 122, 61, 0.6);
+        .btn--nature:hover {
             transform: translateY(-3px);
+            box-shadow: 0 8px 30px var(--color-accent-glow);
+        }
+
+        .btn--outline {
+            background: transparent;
+            color: var(--color-text-primary);
+            border: 2px solid var(--glass-border);
+        }
+
+        .btn--outline:hover {
+            background: var(--color-bg-warm);
+            border-color: var(--color-sage);
         }
 
         /* ========================================
-           SECTIONS (Glass Effect)
+           SECTIONS (Glassmorphism, viel Whitespace)
            ======================================== */
         .section {
-            padding: 5rem 1rem;
+            padding: var(--spacing-xl) 1rem;
             position: relative;
         }
 
         .section--glass {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border-top: 1px solid var(--glass-border);
         }
 
-        .section--glass.section--alt {
-            background: rgba(0, 0, 0, 0.2);
+        .section--alt {
+            background: rgba(232, 220, 196, 0.4);
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 0 1rem;
         }
 
         .section__title {
+            font-family: var(--font-heading);
             font-size: 2rem;
             font-weight: 700;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             text-align: center;
-            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            color: var(--color-text-primary);
         }
 
         .section__text {
-            color: rgba(255, 255, 255, 0.9);
-            max-width: 700px;
-            margin: 0 auto;
+            color: var(--color-text-secondary);
+            max-width: 650px;
+            margin: 0 auto 2.5rem;
             text-align: center;
             font-size: 1.1rem;
+            line-height: 1.8;
         }
 
         /* ========================================
-           SERVICE CARDS
+           SERVICE CARDS (Soft UI, Organisch)
            ======================================== */
         .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 1.5rem;
             margin-top: 2rem;
         }
 
         .service-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
+            background: var(--color-bg-warm);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-organic);
             padding: 2rem;
             text-align: center;
             transition: all 0.3s ease;
+            box-shadow: var(--shadow-soft);
         }
 
         .service-card:hover {
-            background: rgba(255, 255, 255, 0.1);
             transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(255, 150, 50, 0.3);
+            box-shadow: var(--shadow-hover);
+            border-color: var(--color-sage);
         }
 
         .service-card__icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-grass-light) 0%, var(--color-sage) 100%);
+            border-radius: 50%;
+            font-size: 1.5rem;
         }
 
         .service-card__title {
+            font-family: var(--font-heading);
             font-size: 1.25rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: var(--color-text-primary);
         }
 
         .service-card__text {
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.6;
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+            font-size: 0.95rem;
         }
 
         /* ========================================
-           CONTACT FORM
+           CONTACT FORM (Clean, Accessible)
            ======================================== */
         .contact-form {
-            max-width: 600px;
+            max-width: 550px;
             margin: 0 auto;
         }
 
         .form-group {
-            margin-bottom: 1rem;
+            margin-bottom: 1.25rem;
         }
 
         .form-group label {
             display: block;
             margin-bottom: 0.5rem;
             font-weight: 500;
-            color: rgba(255, 255, 255, 0.9);
+            color: var(--color-text-primary);
+            font-size: 0.95rem;
         }
 
         .form-group input,
         .form-group textarea {
             width: 100%;
-            padding: 0.75rem;
+            padding: 0.875rem 1rem;
             font-size: 1rem;
             font-family: inherit;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
+            background: var(--color-bg-warm);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-soft);
+            color: var(--color-text-primary);
             transition: all 0.3s ease;
+            box-shadow: var(--shadow-inset);
         }
 
         .form-group input::placeholder,
         .form-group textarea::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--color-text-muted);
         }
 
         .form-group input:focus,
         .form-group textarea:focus {
             outline: none;
-            border-color: rgba(255, 122, 61, 0.6);
-            box-shadow: 0 0 20px rgba(255, 122, 61, 0.2);
+            border-color: var(--color-sage);
+            box-shadow: 0 0 0 3px rgba(135, 168, 120, 0.15);
         }
 
         /* ========================================
-           FOOTER (Professional Multi-Column)
+           FOOTER (Professionell, Natürlich)
            ======================================== */
         .footer {
-            background: rgba(5, 8, 22, 0.95);
+            background: rgba(45, 58, 46, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             padding: 4rem 2rem 2rem;
         }
 
         .footer__container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
         }
 
@@ -501,23 +613,28 @@
         }
 
         .footer__logo {
-            font-size: 1.5rem;
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
             font-weight: 700;
             color: white;
             margin-bottom: 1rem;
             display: block;
         }
 
+        .footer__logo span {
+            color: var(--color-grass-light);
+        }
+
         .footer__description {
             font-size: 0.9rem;
             line-height: 1.7;
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(255, 255, 255, 0.7);
             margin-bottom: 1.5rem;
         }
 
         .footer__social {
             display: flex;
-            gap: 1rem;
+            gap: 0.75rem;
         }
 
         .footer__social-link {
@@ -528,23 +645,23 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.8);
             text-decoration: none;
             transition: all 0.3s ease;
-            font-size: 1.1rem;
+            font-size: 1rem;
         }
 
         .footer__social-link:hover {
-            background: var(--color-primary);
+            background: var(--color-sage);
             color: white;
             transform: translateY(-3px);
         }
 
         .footer__column-title {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
             color: rgba(255, 255, 255, 0.5);
             margin-bottom: 1.25rem;
         }
@@ -564,7 +681,7 @@
         }
 
         .footer__links a:hover {
-            color: var(--color-primary);
+            color: var(--color-grass-light);
             padding-left: 5px;
         }
 
@@ -596,9 +713,181 @@
         }
 
         .footer__legal a:hover {
-            color: var(--color-primary);
+            color: var(--color-grass-light);
         }
 
+        /* ========================================
+           CHATBOT WIDGET (Angepasst an Naturthema)
+           ======================================== */
+        .chatbot {
+            position: fixed;
+            bottom: 1.5rem;
+            right: 1.5rem;
+            z-index: 9999;
+        }
+
+        .chatbot__toggle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-sage) 0%, var(--color-moss) 100%);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(107, 142, 95, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chatbot__toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(107, 142, 95, 0.5);
+        }
+
+        .chatbot__icon {
+            width: 28px;
+            height: 28px;
+        }
+
+        .chatbot__window {
+            position: absolute;
+            bottom: 70px;
+            right: 0;
+            width: 380px;
+            max-width: calc(100vw - 40px);
+            height: 500px;
+            background: var(--color-bg-warm);
+            backdrop-filter: blur(20px);
+            border-radius: var(--radius-organic);
+            box-shadow: var(--shadow-hover);
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+            display: none;
+        }
+
+        .chatbot__window:not([hidden]) {
+            display: flex;
+        }
+
+        .chatbot__header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.25rem;
+            background: linear-gradient(135deg, var(--color-sage) 0%, var(--color-moss) 100%);
+            color: white;
+        }
+
+        .chatbot__header h3 {
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .chatbot__close {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            font-size: 22px;
+            cursor: pointer;
+            line-height: 1;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .chatbot__close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .chatbot__messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            background: var(--color-bg-cream);
+        }
+
+        .chatbot__message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: var(--radius-soft);
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .chatbot__message--user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--color-sage) 0%, var(--color-moss) 100%);
+            color: white;
+        }
+
+        .chatbot__message--bot {
+            align-self: flex-start;
+            background: white;
+            color: var(--color-text-primary);
+            border: 1px solid var(--glass-border);
+        }
+
+        .chatbot__input {
+            display: flex;
+            padding: 0.75rem;
+            border-top: 1px solid var(--glass-border);
+            gap: 0.5rem;
+            background: var(--color-bg-warm);
+        }
+
+        .chatbot__input input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            background: white;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-soft);
+            color: var(--color-text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+        }
+
+        .chatbot__input input:focus {
+            outline: none;
+            border-color: var(--color-sage);
+        }
+
+        .chatbot__input button {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--color-sage) 0%, var(--color-moss) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-soft);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+        }
+
+        .chatbot__input button:hover {
+            transform: scale(1.05);
+        }
+
+        .chatbot__input button svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* ========================================
+           RESPONSIVE DESIGN
+           ======================================== */
         @media (max-width: 900px) {
             .footer__grid {
                 grid-template-columns: 1fr 1fr;
@@ -608,6 +897,35 @@
             .footer__brand {
                 grid-column: 1 / -1;
                 padding-right: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .nav__menu {
+                display: none;
+            }
+
+            .nav__toggle {
+                display: flex;
+            }
+
+            .hero__hint {
+                display: none;
+            }
+
+            .chatbot__window {
+                width: calc(100vw - 40px);
+                height: 70vh;
+            }
+
+            .search.active .search__input-wrapper {
+                position: fixed;
+                top: 70px;
+                left: 1rem;
+                right: 1rem;
+                width: auto;
+                transform: none;
+                border-radius: var(--radius-soft);
             }
         }
 
@@ -627,191 +945,6 @@
             }
         }
 
-        /* ========================================
-           CHATBOT WIDGET
-           ======================================== */
-        .chatbot {
-            position: fixed;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            z-index: 9999;
-        }
-
-        .chatbot__toggle {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #ff7a3d 0%, #ff8a4a 100%);
-            color: white;
-            border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 20px rgba(255, 122, 61, 0.4);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chatbot__toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 30px rgba(255, 122, 61, 0.6);
-        }
-
-        .chatbot__icon {
-            width: 28px;
-            height: 28px;
-        }
-
-        .chatbot__window {
-            position: absolute;
-            bottom: 70px;
-            right: 0;
-            width: 380px;
-            max-width: calc(100vw - 40px);
-            height: 500px;
-            background: rgba(10, 13, 46, 0.95);
-            backdrop-filter: blur(20px);
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            flex-direction: column;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
-        }
-
-        .chatbot__window:not([hidden]) {
-            display: flex;
-        }
-
-        .chatbot__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background: linear-gradient(135deg, #ff7a3d 0%, #ff8a4a 100%);
-            color: white;
-        }
-
-        .chatbot__header h3 {
-            font-size: 1rem;
-            font-weight: 600;
-        }
-
-        .chatbot__close {
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            line-height: 1;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-
-        .chatbot__close:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-
-        .chatbot__close:active {
-            transform: scale(0.95);
-        }
-
-        .chatbot__messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .chatbot__message {
-            max-width: 80%;
-            padding: 0.75rem 1rem;
-            border-radius: 12px;
-            line-height: 1.4;
-        }
-
-        .chatbot__message--user {
-            align-self: flex-end;
-            background: linear-gradient(135deg, #ff7a3d 0%, #ff8a4a 100%);
-            color: white;
-        }
-
-        .chatbot__message--bot {
-            align-self: flex-start;
-            background: rgba(255, 255, 255, 0.1);
-            color: white;
-        }
-
-        .chatbot__input {
-            display: flex;
-            padding: 0.75rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            gap: 0.5rem;
-        }
-
-        .chatbot__input input {
-            flex: 1;
-            padding: 0.75rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            color: white;
-            font-size: 1rem;
-        }
-
-        .chatbot__input input:focus {
-            outline: none;
-            border-color: rgba(255, 122, 61, 0.6);
-        }
-
-        .chatbot__input button {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #ff7a3d 0%, #ff8a4a 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .chatbot__input button svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* ========================================
-           RESPONSIVE
-           ======================================== */
-        @media (max-width: 768px) {
-            .nav__menu {
-                display: none;
-            }
-
-            .nav__toggle {
-                display: flex;
-            }
-
-            .hero__hint {
-                display: none;
-            }
-
-            .chatbot__window {
-                width: calc(100vw - 40px);
-                height: 70vh;
-            }
-        }
-
         /* Reduced Motion */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
@@ -822,14 +955,14 @@
     </style>
 </head>
 <body>
-    <!-- WebGL Wave Background Canvas -->
-    <canvas id="waveCanvas" aria-hidden="true"></canvas>
+    <!-- WebGL Grass Background Canvas -->
+    <canvas id="grassCanvas" aria-hidden="true"></canvas>
 
     <!-- Header -->
     <header class="header" id="header">
         <nav class="nav">
             <div class="nav__logo">
-                <a href="/">Sunset Waves</a>
+                <a href="/"><span>NATUR</span> UDL</a>
             </div>
             <ul class="nav__menu">
                 <li><a href="index.html">Home</a></li>
@@ -847,14 +980,14 @@
                         </svg>
                     </button>
                     <div class="search__input-wrapper">
-                        <input type="text" class="search__input" id="searchInput" placeholder="Website durchsuchen..." aria-label="Suchbegriff">
+                        <input type="text" class="search__input" id="searchInput" placeholder="Suchen..." aria-label="Suchbegriff">
                         <button class="search__close" id="searchClose" aria-label="Suche schließen">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                 <path d="M18 6L6 18M6 6l12 12"></path>
                             </svg>
                         </button>
                         <button class="search__submit" type="submit" aria-label="Suchen">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <path d="M21 21l-4.35-4.35"></path>
                             </svg>
@@ -876,20 +1009,29 @@
         <!-- Hero Section -->
         <section class="hero" id="home">
             <div class="hero__content">
-                <h1 class="hero__title">Willkommen</h1>
-                <p class="hero__subtitle">Finde dein inneres Licht, lass es all die negative Energie in sich aufnehmen. Finde deinen Weg, um mit diesen negativen Energien umzugehen, sie zu verarbeiten, sie gehen zu lassen und so ein besseres Leben zu genießen.</p>
-                <p class="hero__hint">✨ Bewegen Sie die Maus für den Sonnenuntergangs-Effekt</p>
-                <a href="#contact" class="btn btn--glow">Jetzt starten</a>
+                <h1 class="hero__title">Lernen in natürlicher Atmosphäre</h1>
+                <p class="hero__subtitle">
+                    Unsere Lernplattform verbindet wissenschaftlich fundiertes Design mit der beruhigenden 
+                    Kraft der Natur. Entdecke, wie eine positive Atmosphäre dein Lernen fördern kann.
+                </p>
+                <p class="hero__hint">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" fill="currentColor"/>
+                    </svg>
+                    Bewege die Maus um das Gras sanft zu bewegen
+                </p>
+                <a href="#contact" class="btn btn--nature">Jetzt entdecken</a>
             </div>
         </section>
 
         <!-- About Section -->
         <section class="section section--glass" id="about">
             <div class="container">
-                <h2 class="section__title">Über uns</h2>
+                <h2 class="section__title">Über unser Konzept</h2>
                 <p class="section__text">
-                    Wir verbinden innovative Technologie mit außergewöhnlichem Design. 
-                    Unser KI-gestützter Assistent steht Ihnen rund um die Uhr zur Verfügung.
+                    Basierend auf der Biophilia-Hypothese und der Attention Restoration Theory 
+                    gestalten wir digitale Lernumgebungen, die Stress reduzieren und die 
+                    Aufmerksamkeitsressourcen regenerieren.
                 </p>
             </div>
         </section>
@@ -897,22 +1039,22 @@
         <!-- Services Section -->
         <section class="section section--glass section--alt" id="services">
             <div class="container">
-                <h2 class="section__title">Unsere Services</h2>
+                <h2 class="section__title">Unsere Angebote</h2>
                 <div class="services-grid">
                     <div class="service-card">
-                        <div class="service-card__icon">🤖</div>
-                        <h3 class="service-card__title">KI-Integration</h3>
-                        <p class="service-card__text">Intelligente Chatbots und Automatisierung für Ihr Unternehmen.</p>
+                        <div class="service-card__icon">🌱</div>
+                        <h3 class="service-card__title">Biophiles Lernen</h3>
+                        <p class="service-card__text">Lernumgebungen mit natürlichen Elementen für entspannte Konzentration und mentale Erholung.</p>
                     </div>
                     <div class="service-card">
-                        <div class="service-card__icon">🎨</div>
-                        <h3 class="service-card__title">Webdesign</h3>
-                        <p class="service-card__text">Moderne, responsive Websites mit außergewöhnlichem Design.</p>
+                        <div class="service-card__icon">🧠</div>
+                        <h3 class="service-card__title">Kognitive Entlastung</h3>
+                        <p class="service-card__text">Minimalistisches Design nach der Cognitive Load Theory für effizientes Lernen ohne Ablenkung.</p>
                     </div>
                     <div class="service-card">
-                        <div class="service-card__icon">⚡</div>
-                        <h3 class="service-card__title">Performance</h3>
-                        <p class="service-card__text">Optimierte Ladezeiten und erstklassige Nutzererfahrung.</p>
+                        <div class="service-card__icon">💬</div>
+                        <h3 class="service-card__title">KI-Lernbegleitung</h3>
+                        <p class="service-card__text">Intelligente Assistenten, die individuell auf deine Fragen eingehen und beim Lernen unterstützen.</p>
                     </div>
                 </div>
             </div>
@@ -925,17 +1067,17 @@
                 <form class="contact-form" id="contactForm">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" id="name" name="name" placeholder="Ihr Name" required>
+                        <input type="text" id="name" name="name" placeholder="Dein Name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">E-Mail</label>
-                        <input type="email" id="email" name="email" placeholder="ihre@email.de" required>
+                        <input type="email" id="email" name="email" placeholder="deine@email.de" required>
                     </div>
                     <div class="form-group">
                         <label for="message">Nachricht</label>
-                        <textarea id="message" name="message" rows="5" placeholder="Ihre Nachricht..." required></textarea>
+                        <textarea id="message" name="message" rows="5" placeholder="Deine Nachricht..." required></textarea>
                     </div>
-                    <button type="submit" class="btn btn--glow">Absenden</button>
+                    <button type="submit" class="btn btn--nature">Absenden</button>
                 </form>
             </div>
         </section>
@@ -947,60 +1089,55 @@
             <div class="footer__grid">
                 <!-- Brand Column -->
                 <div class="footer__brand">
-                    <span class="footer__logo">Sunset Waves</span>
+                    <span class="footer__logo"><span>NATUR</span> UDL</span>
                     <p class="footer__description">
-                        Wir entwickeln intelligente KI-Lösungen für persönliches Wachstum und berufliche Entwicklung. 
-                        Unsere Mission ist es, Menschen zu befähigen, ihr volles Potenzial zu entfalten.
+                        Wir entwickeln wissenschaftlich fundierte Lernumgebungen, die auf biophilem Design 
+                        basieren und optimale Bedingungen für konzentriertes Lernen schaffen.
                     </p>
                     <div class="footer__social">
                         <a href="#" class="footer__social-link" aria-label="LinkedIn">in</a>
                         <a href="#" class="footer__social-link" aria-label="Twitter/X">𝕏</a>
                         <a href="#" class="footer__social-link" aria-label="Instagram">📷</a>
-                        <a href="#" class="footer__social-link" aria-label="YouTube">▶</a>
                     </div>
                 </div>
 
                 <!-- Services Column -->
                 <div class="footer__column">
-                    <h4 class="footer__column-title">Services</h4>
+                    <h4 class="footer__column-title">Angebote</h4>
                     <ul class="footer__links">
                         <li><a href="chatbots.html">KI-Assistenten</a></li>
                         <li><a href="lernmaterialien.html">Lernmaterialien</a></li>
                         <li><a href="#services">Beratung</a></li>
-                        <li><a href="#">Newsletter</a></li>
                     </ul>
                 </div>
 
-                <!-- Informationen Column -->
+                <!-- Info Column -->
                 <div class="footer__column">
                     <h4 class="footer__column-title">Informationen</h4>
                     <ul class="footer__links">
                         <li><a href="#about">Über uns</a></li>
+                        <li><a href="#">Wissenschaft</a></li>
                         <li><a href="#">FAQ</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Karriere</a></li>
                     </ul>
                 </div>
 
-                <!-- Kontakt Column -->
+                <!-- Contact Column -->
                 <div class="footer__column">
                     <h4 class="footer__column-title">Kontakt</h4>
                     <ul class="footer__links">
                         <li><a href="#contact">Kontaktformular</a></li>
-                        <li><a href="mailto:info@sunsetwaves.de">info@sunsetwaves.de</a></li>
-                        <li><a href="tel:+491234567890">+49 123 456 7890</a></li>
+                        <li><a href="mailto:info@natur-udl.de">info@natur-udl.de</a></li>
                         <li><a href="#">Support</a></li>
                     </ul>
                 </div>
             </div>
 
             <div class="footer__bottom">
-                <p class="footer__copyright">&copy; 2025 Sunset Waves. Alle Rechte vorbehalten.</p>
+                <p class="footer__copyright">&copy; 2025 NATUR UDL. Alle Rechte vorbehalten.</p>
                 <div class="footer__legal">
                     <a href="#">Impressum</a>
                     <a href="#">Datenschutz</a>
                     <a href="#">AGB</a>
-                    <a href="#">Cookie-Einstellungen</a>
                 </div>
             </div>
         </div>
@@ -1015,12 +1152,12 @@
         </button>
         <div class="chatbot__window" id="chatbotWindow" hidden>
             <div class="chatbot__header">
-                <h3>KI-Assistent</h3>
+                <h3>Lern-Assistent</h3>
                 <button class="chatbot__close" id="chatbotClose" aria-label="Chat schließen">&times;</button>
             </div>
             <div class="chatbot__messages" id="chatbotMessages">
                 <div class="chatbot__message chatbot__message--bot">
-                    Hallo! Ich bin Ihr KI-Assistent. Wie kann ich Ihnen helfen?
+                    Hallo! Ich bin dein Lern-Assistent. Wie kann ich dir heute helfen?
                 </div>
             </div>
             <form class="chatbot__input" id="chatbotForm">
@@ -1035,51 +1172,15 @@
     </div>
 
     <!-- ========================================
-         WEBGL WAVE BACKGROUND SHADER
-         Basierend auf der JSON-Spezifikation:
-         - FBM Noise mit 5 Oktaven
-         - Domain Warping
-         - Blinn-Phong Specular
-         - Fresnel-Effekte
-         - Vignette, Film Grain, Bloom
+         WEBGL GRASS BACKGROUND SHADER
+         Biophiles Design mit interaktivem Gras
+         - Minimalistisches Wiesen-Design
+         - Gras bewegt sich bei Mausbewegung
+         - Basiert auf Attention Restoration Theory
          ======================================== -->
     <script>
     (function() {
         'use strict';
-        
-        // ========================================
-        // CONFIGURATION (from JSON spec)
-        // ========================================
-        const CONFIG = {
-            waves: {
-                octaves: 5,
-                baseFrequency: 1.35,
-                lacunarity: 2.05,
-                gain: 0.55,
-                choppiness: 1.25,
-                domainWarpStrength: 0.35,
-                speed: 0.12,
-                direction: [0.85, 0.25]
-            },
-            lighting: {
-                sunPosition: [0.62, 0.44],
-                shininess: 180,
-                fresnelPower: 4.5,
-                fresnelIntensity: 0.55
-            },
-            postProcess: {
-                vignetteStrength: 0.25,
-                filmGrainAmount: 0.035,
-                bloomThreshold: 0.75,
-                bloomIntensity: 0.22
-            },
-            interaction: {
-                smoothing: 0.12,
-                influenceRadius: 0.22,
-                shimmerBoost: 1.35,
-                sparkleThreshold: 0.68
-            }
-        };
 
         // ========================================
         // VERTEX SHADER
@@ -1092,7 +1193,7 @@
         `;
 
         // ========================================
-        // FRAGMENT SHADER (Full Implementation)
+        // FRAGMENT SHADER - Minimalistische Wiese
         // ========================================
         const FRAGMENT_SHADER = `
             #ifdef GL_ES
@@ -1104,39 +1205,37 @@
             uniform vec2 u_pointer;
             uniform float u_pointerInfluence;
 
-            // === PALETTE (from JSON spec) ===
-            const vec3 SKY_TOP = vec3(0.102, 0.059, 0.180);       // #1a0f2e
-            const vec3 SKY_MID = vec3(0.357, 0.141, 0.369);       // #5b245e
-            const vec3 SKY_HORIZON = vec3(1.0, 0.478, 0.239);     // #ff7a3d
+            // === BIOPHILE FARBPALETTE ===
+            // Himmel (sanft, nicht ablenkend)
+            const vec3 SKY_TOP = vec3(0.89, 0.94, 0.97);      // #e3f0f7
+            const vec3 SKY_MID = vec3(0.72, 0.83, 0.89);      // #b8d4e3
+            const vec3 SKY_HORIZON = vec3(0.82, 0.88, 0.82);  // Sanfter Übergang
             
-            const vec3 WATER_DEEP = vec3(0.024, 0.031, 0.078);    // #060814
-            const vec3 WATER_MID = vec3(0.043, 0.086, 0.188);     // #0b1630
-            const vec3 WATER_RIM = vec3(0.075, 0.145, 0.290);     // #13254a
+            // Gras (Salbeigr\u00fcn, beruhigend)
+            const vec3 GRASS_LIGHT = vec3(0.66, 0.78, 0.53);  // #a8c686
+            const vec3 GRASS_MID = vec3(0.49, 0.71, 0.42);    // #7db46c
+            const vec3 GRASS_DARK = vec3(0.35, 0.60, 0.29);   // #5a9a4a
+            const vec3 GRASS_SAGE = vec3(0.53, 0.66, 0.47);   // #87a878
             
-            const vec3 SUN_CORE = vec3(1.0, 0.839, 0.631);        // #ffd6a1
-            const vec3 SUN_GLOW = vec3(1.0, 0.541, 0.290);        // #ff8a4a
+            // Erde/Boden
+            const vec3 EARTH = vec3(0.55, 0.44, 0.28);        // Erdton
 
             // === CONSTANTS ===
             const float PI = 3.14159265359;
-            const float HORIZON_LINE = 0.42;
-            const float PERSPECTIVE_STRENGTH = 1.15;
+            const float HORIZON_LINE = 0.35;
 
             // === NOISE FUNCTIONS ===
             
-            // Hash function for pseudo-random
             float hash(vec2 p) {
                 vec3 p3 = fract(vec3(p.xyx) * 0.1031);
                 p3 += dot(p3, p3.yzx + 33.33);
                 return fract((p3.x + p3.y) * p3.z);
             }
             
-            // 2D Value Noise
             float noise(vec2 p) {
                 vec2 i = floor(p);
                 vec2 f = fract(p);
-                
-                // Quintic interpolation for smoother results
-                vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+                vec2 u = f * f * (3.0 - 2.0 * f);
                 
                 float a = hash(i);
                 float b = hash(i + vec2(1.0, 0.0));
@@ -1146,200 +1245,181 @@
                 return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
             }
             
-            // Domain Warping
-            vec2 domainWarp(vec2 p, float time) {
-                float warpStrength = 0.35;
-                float warpFreq = 0.9;
-                
-                float wx = noise(p * warpFreq + time * 0.1);
-                float wy = noise(p * warpFreq + vec2(5.2, 1.3) + time * 0.1);
-                
-                return p + vec2(wx, wy) * warpStrength;
-            }
-            
-            // FBM (Fractal Brownian Motion) with 5 octaves
-            float fbm(vec2 p, float time) {
+            // FBM f\u00fcr organische Muster
+            float fbm(vec2 p, int octaves) {
                 float value = 0.0;
                 float amplitude = 0.5;
-                float frequency = 1.35;  // baseFrequency
-                float lacunarity = 2.05;
-                float gain = 0.55;
+                float frequency = 1.0;
                 
-                // Apply domain warp
-                p = domainWarp(p, time);
-                
-                // 5 octaves as per spec
                 for (int i = 0; i < 5; i++) {
-                    // Wave direction animation
-                    vec2 dir = vec2(0.85, 0.25);
-                    vec2 animatedP = p + dir * time * 0.12 * float(i + 1) * 0.3;
-                    
-                    value += amplitude * noise(animatedP * frequency);
-                    
-                    frequency *= lacunarity;
-                    amplitude *= gain;
+                    if (i >= octaves) break;
+                    value += amplitude * noise(p * frequency);
+                    frequency *= 2.0;
+                    amplitude *= 0.5;
                 }
-                
-                // Apply choppiness
-                value = pow(abs(value), 1.25);
                 
                 return value;
             }
-            
-            // Secondary swell
-            float secondarySwell(vec2 p, float time) {
-                vec2 dir = vec2(-0.2, 0.95);
-                float speed = 0.06;
-                float amplitude = 0.35;
+
+            // === GRASS BLADE FUNCTION ===
+            // Einzelner Grashalm mit Wind-Animation
+            float grassBlade(vec2 uv, vec2 basePos, float height, float width, float bend, float phase) {
+                // Position relativ zur Basis
+                vec2 pos = uv - basePos;
                 
-                vec2 animatedP = p + dir * time * speed;
-                return noise(animatedP * 2.0) * amplitude;
+                // Nur nach oben zeichnen
+                if (pos.y < 0.0 || pos.y > height) return 0.0;
+                
+                // Normalisierte H\u00f6he (0 = Basis, 1 = Spitze)
+                float t = pos.y / height;
+                
+                // Biegung des Halms (st\u00e4rker an der Spitze)
+                float bendOffset = bend * t * t;
+                
+                // Breite nimmt nach oben ab
+                float bladeWidth = width * (1.0 - t * 0.7);
+                
+                // Distanz zum Halm-Zentrum
+                float dist = abs(pos.x - bendOffset);
+                
+                // Weicher Rand
+                return smoothstep(bladeWidth, bladeWidth * 0.3, dist);
             }
 
-            // === WATER SURFACE ===
-            
-            float getWaveHeight(vec2 uv, float time) {
-                float height = fbm(uv * 3.0, time);
-                height += secondarySwell(uv * 2.0, time);
-                return height;
-            }
-            
-            // Calculate normals from height field
-            vec3 calcNormal(vec2 uv, float time) {
-                float eps = 0.0025;
+            // === GRASS FIELD ===
+            vec3 renderGrass(vec2 uv, float time, vec2 pointer, float pointerDist) {
+                vec3 color = vec3(0.0);
+                float grassMask = 0.0;
                 
-                float hL = getWaveHeight(uv - vec2(eps, 0.0), time);
-                float hR = getWaveHeight(uv + vec2(eps, 0.0), time);
-                float hD = getWaveHeight(uv - vec2(0.0, eps), time);
-                float hU = getWaveHeight(uv + vec2(0.0, eps), time);
+                // Basis-Grasboden
+                float groundNoise = fbm(uv * 8.0, 3);
+                vec3 groundColor = mix(GRASS_DARK, GRASS_MID, groundNoise);
                 
-                float normalStrength = 1.35;
-                vec3 normal = normalize(vec3(
-                    (hL - hR) * normalStrength,
-                    (hD - hU) * normalStrength,
-                    1.0
-                ));
+                // Mehrere Schichten Gras f\u00fcr Tiefe
+                for (float layer = 0.0; layer < 3.0; layer++) {
+                    float layerDepth = layer / 3.0;
+                    float layerScale = 15.0 + layer * 10.0;
+                    
+                    // Grashalm-Positionen (pseudo-zuf\u00e4llig verteilt)
+                    for (float i = 0.0; i < 8.0; i++) {
+                        float xOffset = hash(vec2(i, layer)) * 0.15;
+                        float yBase = 0.0;
+                        
+                        // Tile das Gras horizontal
+                        float tileX = fract(uv.x * layerScale + xOffset);
+                        vec2 basePos = vec2(tileX, yBase);
+                        
+                        // Variation in H\u00f6he und Breite
+                        float heightVar = 0.08 + hash(vec2(i + layer * 10.0, 0.0)) * 0.12;
+                        float widthVar = 0.008 + hash(vec2(i, layer + 5.0)) * 0.006;
+                        
+                        // Wind-Animation
+                        float windPhase = hash(vec2(i, layer)) * PI * 2.0;
+                        float windSpeed = 0.8 + hash(vec2(i + 1.0, layer)) * 0.4;
+                        float wind = sin(time * windSpeed + uv.x * 5.0 + windPhase) * 0.02;
+                        
+                        // Maus-Interaktion: Gras bewegt sich weg
+                        float mouseEffect = 0.0;
+                        float effectRadius = 0.25;
+                        vec2 bladeWorldPos = vec2(uv.x, uv.y);
+                        float distToPointer = length(bladeWorldPos - pointer);
+                        
+                        if (distToPointer < effectRadius) {
+                            float influence = (1.0 - distToPointer / effectRadius);
+                            influence = influence * influence; // Quadratisch f\u00fcr sanfteren Abfall
+                            vec2 pushDir = normalize(bladeWorldPos - pointer);
+                            mouseEffect = pushDir.x * influence * 0.08 * u_pointerInfluence;
+                        }
+                        
+                        float totalBend = wind + mouseEffect;
+                        
+                        // Transformierte UV f\u00fcr diese Schicht
+                        vec2 layerUV = vec2(tileX, uv.y * (1.0 + layerDepth * 0.5));
+                        
+                        float blade = grassBlade(layerUV, basePos, heightVar, widthVar, totalBend, windPhase);
+                        
+                        // Farbe basierend auf Schicht und H\u00f6he
+                        vec3 bladeColor = mix(GRASS_DARK, GRASS_LIGHT, layerUV.y / heightVar * 0.5 + layerDepth * 0.3);
+                        bladeColor = mix(bladeColor, GRASS_SAGE, hash(vec2(i * 3.0, layer)) * 0.3);
+                        
+                        color = mix(color, bladeColor, blade * (0.7 + layerDepth * 0.3));
+                        grassMask = max(grassMask, blade);
+                    }
+                }
                 
-                return normal;
-            }
-
-            // === LIGHTING ===
-            
-            // Fresnel effect
-            float fresnel(vec3 viewDir, vec3 normal, float power) {
-                return pow(1.0 - max(dot(viewDir, normal), 0.0), power);
-            }
-            
-            // Blinn-Phong specular
-            float blinnPhong(vec3 lightDir, vec3 viewDir, vec3 normal, float shininess) {
-                vec3 halfDir = normalize(lightDir + viewDir);
-                float specAngle = max(dot(halfDir, normal), 0.0);
-                return pow(specAngle, shininess);
-            }
-
-            // === POST PROCESSING ===
-            
-            // Vignette effect
-            float vignette(vec2 uv, float strength, float radius) {
-                float dist = length(uv - 0.5);
-                return 1.0 - smoothstep(radius, radius + 0.5, dist) * strength;
-            }
-            
-            // Film grain
-            float filmGrain(vec2 uv, float time) {
-                return (hash(uv * 1000.0 + time * 100.0) - 0.5) * 2.0;
-            }
-            
-            // Simple bloom approximation
-            vec3 cheapBloom(vec3 color, float threshold, float intensity) {
-                float brightness = dot(color, vec3(0.2126, 0.7152, 0.0722));
-                float bloom = max(0.0, brightness - threshold);
-                return color + color * bloom * intensity;
+                // Kombiniere mit Grundfarbe
+                return mix(groundColor, color, grassMask * 0.8 + 0.2);
             }
 
             // === MAIN ===
-            
             void main() {
                 vec2 uv = gl_FragCoord.xy / u_resolution.xy;
                 float aspect = u_resolution.x / u_resolution.y;
                 
-                // Aspect-corrected coordinates
-                vec2 uvAspect = vec2(uv.x * aspect, uv.y);
-                
-                // Pointer position (normalized and aspect-corrected)
+                // Pointer normalisieren
                 vec2 pointer = u_pointer / u_resolution.xy;
-                pointer.x *= aspect;
                 
                 float time = u_time;
+                vec3 finalColor;
                 
-                // === FULL SCREEN WATER (No Sky/Sun) ===
+                // === HIMMEL (oberer Bereich) ===
+                if (uv.y > HORIZON_LINE) {
+                    // Sanfter Himmel-Gradient
+                    float skyT = (uv.y - HORIZON_LINE) / (1.0 - HORIZON_LINE);
+                    skyT = pow(skyT, 0.7); // Nicht-linear f\u00fcr nat\u00fcrlicheren Look
+                    
+                    vec3 skyColor = mix(SKY_HORIZON, SKY_MID, skyT * 0.6);
+                    skyColor = mix(skyColor, SKY_TOP, pow(skyT, 1.5));
+                    
+                    // Sehr subtile Wolken (nicht ablenkend!)
+                    float clouds = fbm(vec2(uv.x * 2.0 + time * 0.01, uv.y * 3.0), 3);
+                    clouds = smoothstep(0.4, 0.6, clouds) * 0.08;
+                    skyColor += clouds;
+                    
+                    finalColor = skyColor;
+                }
+                // === WIESE (unterer Bereich) ===
+                else {
+                    // Perspektive: weiter weg = h\u00f6her
+                    float grassT = 1.0 - uv.y / HORIZON_LINE;
+                    grassT = pow(grassT, 0.5);
+                    
+                    // Gras-UV mit Perspektive
+                    vec2 grassUV = vec2(uv.x * aspect, grassT);
+                    
+                    // Abstand zur Maus
+                    float pointerDist = length(uv - pointer);
+                    
+                    // Render Gras
+                    vec3 grassColor = renderGrass(grassUV, time, vec2(pointer.x * aspect, 1.0 - pointer.y / HORIZON_LINE), pointerDist);
+                    
+                    // Farbvariation basierend auf Distanz (Tiefe)
+                    grassColor = mix(grassColor, GRASS_SAGE * 0.9, grassT * 0.3);
+                    
+                    // Leichte atmosph\u00e4rische Perspektive
+                    grassColor = mix(grassColor, SKY_HORIZON, grassT * 0.15);
+                    
+                    finalColor = grassColor;
+                }
                 
-                // Water UV with subtle perspective (more at bottom)
-                float perspective = pow(1.0 - uv.y, 0.8);
-                vec2 waterUV = uvAspect * (1.0 + perspective * 1.5);
+                // === HORIZONT-\u00dcBERGANG ===
+                float horizonBlend = smoothstep(HORIZON_LINE - 0.02, HORIZON_LINE + 0.02, uv.y);
+                // Sanfter \u00dcbergang bereits in der Logik oben
                 
-                // Wave height
-                float waveHeight = getWaveHeight(waterUV, time);
+                // === POST-PROCESSING ===
                 
-                // Surface normal
-                vec3 normal = calcNormal(waterUV, time);
+                // Sehr sanfte Vignette (kaum sichtbar)
+                float vignette = 1.0 - length(uv - 0.5) * 0.2;
+                finalColor *= vignette;
                 
-                // View direction
-                vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
+                // Minimal Film-Grain f\u00fcr nat\u00fcrlichen Look
+                float grain = (hash(uv * 1000.0 + time) - 0.5) * 0.02;
+                finalColor += grain;
                 
-                // Base water color - gradient from deep to lighter blue
-                vec3 waterColor = mix(WATER_DEEP, WATER_MID, uv.y * 0.8);
-                waterColor = mix(waterColor, WATER_RIM, waveHeight * 0.4);
+                // Leichte Farbkorrektur f\u00fcr W\u00e4rme
+                finalColor = pow(finalColor, vec3(0.98, 1.0, 1.02));
                 
-                // Subtle fresnel for depth
-                float fres = fresnel(viewDir, normal, 5.0) * 0.3;
-                waterColor = mix(waterColor, WATER_RIM * 1.2, fres);
-                
-                // === POINTER INTERACTION (SHIMMER) - Soft & Warm ===
-                float pointerDist = length(uvAspect - pointer);
-                float pointerInfluence = smoothstep(0.45, 0.0, pointerDist) * u_pointerInfluence;
-                
-                // Gentler shimmer boost
-                float shimmerBoost = 1.0 + pointerInfluence * 0.6;
-                
-                // Subtle micro-flicker
-                float flicker = 1.0 + sin(time * 4.0 + waveHeight * 15.0) * 0.05 * pointerInfluence;
-                
-                // Sparkle on wave crests - more subtle
-                float sparkle = smoothstep(0.6, 0.9, waveHeight) * pointerInfluence * 0.4;
-                
-                // Warm, soft light colors (golden amber tones)
-                vec3 shimmerColor = vec3(0.95, 0.75, 0.45);  // Warm golden
-                vec3 sparkleColor = vec3(1.0, 0.85, 0.6);    // Soft amber
-                
-                // Apply shimmer based on wave crests - much softer
-                float waveCrests = smoothstep(0.35, 0.75, waveHeight);
-                waterColor += shimmerColor * waveCrests * pointerInfluence * shimmerBoost * flicker * 0.15;
-                waterColor += sparkleColor * sparkle * flicker * 0.25;
-                
-                // Soft outer glow - very subtle warm light
-                float outerGlow = smoothstep(0.6, 0.15, pointerDist) * u_pointerInfluence * 0.06;
-                waterColor += shimmerColor * outerGlow * 0.5;
-                
-                vec3 sky = waterColor;
-                
-                // === POST PROCESSING ===
-                
-                // Vignette - gentle darkening at edges
-                float vig = vignette(uv, 0.25, 0.75);
-                sky *= vig;
-                
-                // Film grain - barely noticeable
-                float grain = filmGrain(uv, time) * 0.015;
-                sky += grain;
-                
-                // Subtle bloom for warm glow
-                sky = cheapBloom(sky, 0.6, 0.15);
-                
-                // Clamp highlights - keep it subtle
-                sky = min(sky, vec3(0.85));
-                
-                gl_FragColor = vec4(sky, 1.0);
+                gl_FragColor = vec4(finalColor, 1.0);
             }
         `;
 
@@ -1347,13 +1427,12 @@
         // WEBGL SETUP
         // ========================================
         
-        const canvas = document.getElementById('waveCanvas');
+        const canvas = document.getElementById('grassCanvas');
         if (!canvas) {
-            console.error('Canvas not found');
+            console.error('Canvas nicht gefunden');
             return;
         }
         
-        // Try WebGL2 first, fallback to WebGL1
         let gl = canvas.getContext('webgl2');
         let isWebGL2 = true;
         
@@ -1363,36 +1442,35 @@
         }
         
         if (!gl) {
-            console.warn('WebGL not supported, using CSS fallback');
+            console.warn('WebGL nicht unterst\u00fctzt, nutze CSS Fallback');
             canvas.style.display = 'none';
             const fallback = document.createElement('div');
-            fallback.className = 'wave-fallback';
+            fallback.className = 'grass-fallback';
             document.body.insertBefore(fallback, document.body.firstChild);
             return;
         }
         
-        console.log('WebGL' + (isWebGL2 ? '2' : '1') + ' initialized');
+        console.log('WebGL' + (isWebGL2 ? '2' : '1') + ' initialisiert');
 
-        // Compile shader
+        // Shader kompilieren
         function compileShader(source, type) {
             const shader = gl.createShader(type);
             gl.shaderSource(shader, source);
             gl.compileShader(shader);
             
             if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                console.error('Shader error:', gl.getShaderInfoLog(shader));
+                console.error('Shader Fehler:', gl.getShaderInfoLog(shader));
                 gl.deleteShader(shader);
                 return null;
             }
             return shader;
         }
 
-        // Create program
         const vertexShader = compileShader(VERTEX_SHADER, gl.VERTEX_SHADER);
         const fragmentShader = compileShader(FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
         
         if (!vertexShader || !fragmentShader) {
-            console.error('Failed to compile shaders');
+            console.error('Shader-Kompilierung fehlgeschlagen');
             return;
         }
 
@@ -1402,13 +1480,13 @@
         gl.linkProgram(program);
 
         if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-            console.error('Program link error:', gl.getProgramInfoLog(program));
+            console.error('Programm-Link Fehler:', gl.getProgramInfoLog(program));
             return;
         }
 
         gl.useProgram(program);
 
-        // Create fullscreen quad
+        // Fullscreen Quad
         const positionBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
@@ -1420,7 +1498,7 @@
         gl.enableVertexAttribArray(positionLoc);
         gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
 
-        // Get uniform locations
+        // Uniforms
         const uniforms = {
             resolution: gl.getUniformLocation(program, 'u_resolution'),
             time: gl.getUniformLocation(program, 'u_time'),
@@ -1438,7 +1516,6 @@
         let isRunning = true;
         let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        // Resize handler
         function resize() {
             const dpr = Math.min(window.devicePixelRatio || 1, 2);
             width = window.innerWidth;
@@ -1452,14 +1529,13 @@
             gl.viewport(0, 0, canvas.width, canvas.height);
             gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
             
-            // Initialize pointer to center-right (where sun is)
+            // Pointer in der Mitte initialisieren
             if (pointerX === 0 && pointerY === 0) {
-                pointerX = targetPointerX = width * 0.62;
-                pointerY = targetPointerY = height * 0.56;
+                pointerX = targetPointerX = width * 0.5;
+                pointerY = targetPointerY = height * 0.7;
             }
         }
 
-        // Pointer handlers
         function onPointerMove(e) {
             targetPointerX = e.clientX || (e.touches && e.touches[0].clientX) || targetPointerX;
             targetPointerY = e.clientY || (e.touches && e.touches[0].clientY) || targetPointerY;
@@ -1470,13 +1546,11 @@
         window.addEventListener('touchmove', onPointerMove, { passive: true });
         window.addEventListener('touchstart', onPointerMove, { passive: true });
 
-        // Visibility change
         document.addEventListener('visibilitychange', () => {
             isRunning = !document.hidden;
             if (isRunning) requestAnimationFrame(render);
         });
 
-        // Initial resize
         resize();
 
         // ========================================
@@ -1486,29 +1560,27 @@
         function render(timestamp) {
             if (!isRunning) return;
             
-            // Time in seconds, slower if reduced motion
-            const timeSpeed = reducedMotion ? 0.35 : 1.0;
+            const timeSpeed = reducedMotion ? 0.2 : 1.0;
             const time = timestamp * 0.001 * timeSpeed;
             
-            // Smooth pointer interpolation
-            const smoothing = reducedMotion ? 0.05 : 0.12;
+            // Sanfte Pointer-Interpolation
+            const smoothing = reducedMotion ? 0.05 : 0.08;
             pointerX += (targetPointerX - pointerX) * smoothing;
             pointerY += (targetPointerY - pointerY) * smoothing;
             
-            // Update uniforms
             gl.uniform1f(uniforms.time, time);
-            gl.uniform2f(uniforms.pointer, pointerX * (canvas.width / width), 
-                        (height - pointerY) * (canvas.height / height)); // Flip Y
-            gl.uniform1f(uniforms.pointerInfluence, reducedMotion ? 0.5 : 1.0);
+            gl.uniform2f(uniforms.pointer, 
+                pointerX * (canvas.width / width), 
+                (height - pointerY) * (canvas.height / height));
+            gl.uniform1f(uniforms.pointerInfluence, reducedMotion ? 0.3 : 1.0);
             
-            // Draw
             gl.drawArrays(gl.TRIANGLES, 0, 6);
             
             requestAnimationFrame(render);
         }
 
         requestAnimationFrame(render);
-        console.log('Sunset Shimmer Waves initialized');
+        console.log('Biophiler Wiesen-Hintergrund initialisiert');
 
     })();
 
@@ -1523,62 +1595,43 @@
         const chatbotInput = document.getElementById('chatbotInput');
         const chatbotMessages = document.getElementById('chatbotMessages');
 
-        if (!chatbotToggleBtn || !chatbotWindowEl) {
-            console.error('Chatbot elements not found');
-            return;
-        }
+        if (!chatbotToggleBtn || !chatbotWindowEl) return;
 
-        // Track chatbot open state
         let isChatbotOpen = false;
 
-        // Function to open chatbot
         function openChatbot() {
             chatbotWindowEl.hidden = false;
             chatbotWindowEl.style.display = 'flex';
             isChatbotOpen = true;
             setTimeout(() => chatbotInput && chatbotInput.focus(), 100);
-            console.log('Chatbot opened');
         }
 
-        // Function to close chatbot
         function closeChatbot() {
             chatbotWindowEl.hidden = true;
             chatbotWindowEl.style.display = 'none';
             isChatbotOpen = false;
-            console.log('Chatbot closed');
         }
 
-        // Toggle button click handler
         chatbotToggleBtn.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            if (isChatbotOpen) {
-                closeChatbot();
-            } else {
-                openChatbot();
-            }
+            isChatbotOpen ? closeChatbot() : openChatbot();
         });
 
-        // Close button click handler
         if (chatbotCloseBtn) {
             chatbotCloseBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 closeChatbot();
             });
-            console.log('Close button handler attached');
-        } else {
-            console.error('Close button not found');
         }
 
-        // Form submit handler
         if (chatbotForm) {
             chatbotForm.addEventListener('submit', (e) => {
                 e.preventDefault();
                 const text = chatbotInput.value.trim();
                 if (!text) return;
                 
-                // Add user message
                 const userMsg = document.createElement('div');
                 userMsg.className = 'chatbot__message chatbot__message--user';
                 userMsg.textContent = text;
@@ -1586,11 +1639,10 @@
                 
                 chatbotInput.value = '';
                 
-                // Simulate bot response
                 setTimeout(() => {
                     const botMsg = document.createElement('div');
                     botMsg.className = 'chatbot__message chatbot__message--bot';
-                    botMsg.textContent = 'Vielen Dank für Ihre Nachricht! Im Live-Modus würde ich Ihnen eine KI-generierte Antwort geben.';
+                    botMsg.textContent = 'Danke f\u00fcr deine Nachricht! Im Live-Modus w\u00fcrde ich dir eine hilfreiche Antwort geben.';
                     chatbotMessages.appendChild(botMsg);
                     chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
                 }, 1000);
@@ -1598,8 +1650,6 @@
                 chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
             });
         }
-
-        console.log('Chatbot initialized successfully');
     })();
 
     // ========================================
@@ -1627,14 +1677,12 @@
 
         if (!search || !searchToggle || !searchInput) return;
 
-        // Toggle search open/close
         searchToggle.addEventListener('click', (e) => {
             e.preventDefault();
             search.classList.add('active');
             setTimeout(() => searchInput.focus(), 100);
         });
 
-        // Close search
         if (searchClose) {
             searchClose.addEventListener('click', (e) => {
                 e.preventDefault();
@@ -1643,7 +1691,6 @@
             });
         }
 
-        // Close on Escape key
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && search.classList.contains('active')) {
                 search.classList.remove('active');
@@ -1651,29 +1698,24 @@
             }
         });
 
-        // Handle search submit
         searchInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 e.preventDefault();
                 const query = searchInput.value.trim();
                 if (query) {
-                    // For now, show an alert - later integrate with actual search
-                    alert('Suche nach: "' + query + '"\n\nDiese Funktion wird bald verfügbar sein!');
+                    alert('Suche nach: "' + query + '"\n\nDiese Funktion wird bald verf\u00fcgbar sein!');
                     search.classList.remove('active');
                     searchInput.value = '';
                 }
             }
         });
 
-        // Close when clicking outside
         document.addEventListener('click', (e) => {
             if (search.classList.contains('active') && !search.contains(e.target)) {
                 search.classList.remove('active');
                 searchInput.value = '';
             }
         });
-
-        console.log('Search initialized');
     })();
     </script>
 </body>
