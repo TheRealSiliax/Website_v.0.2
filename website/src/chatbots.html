@@ -6,14 +6,14 @@
     <meta name="description" content="Entdecken Sie unsere KI-Assistenten und Lernbots - Interaktive Chatbots für verschiedene Anwendungsbereiche">
     <title>KI-Assistenten | Sunset Waves</title>
     
-    <!-- Fonts -->
+    <!-- Fonts - Inter für moderne Typografie -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <style>
         /* ========================================
-           CSS RESET & BASE
+           CSS RESET & BASE (Konsistent mit index.html)
            ======================================== */
         *, *::before, *::after {
             margin: 0;
@@ -22,14 +22,9 @@
         }
 
         :root {
-            --color-accent: #FAEF5D;
-            --color-accent-hover: #f5e740;
-            --color-bg-dark: #0a0a0a;
-            --color-bg-light: #ffffff;
-            --color-text-dark: #0a0a0a;
-            --color-text-light: #ffffff;
+            --color-primary: #ff7a3d;
+            --color-primary-dark: #e65a1d;
             --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         html {
@@ -40,14 +35,47 @@
             font-family: var(--font-primary);
             font-size: 16px;
             line-height: 1.6;
-            color: var(--color-text-dark);
-            background: var(--color-bg-light);
+            color: white;
             min-height: 100vh;
             overflow-x: hidden;
+            /* Fallback Gradient */
+            background: radial-gradient(circle at 60% 45%, rgba(255,122,61,0.35), transparent 45%), 
+                        linear-gradient(180deg, #1a0f2e 0%, #5b245e 35%, #0b1630 70%, #060814 100%);
         }
 
         /* ========================================
-           HEADER & NAVIGATION
+           WAVE BACKGROUND CANVAS
+           ======================================== */
+        #waveCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Fallback für CSS-Animation wenn WebGL nicht verfügbar */
+        .wave-fallback {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 60% 45%, rgba(255,122,61,0.35), transparent 45%), 
+                        linear-gradient(180deg, #1a0f2e 0%, #5b245e 35%, #0b1630 70%, #060814 100%);
+            animation: subtleShift 18s ease-in-out infinite;
+        }
+
+        @keyframes subtleShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* ========================================
+           HEADER & NAVIGATION (Glassmorphismus)
            ======================================== */
         .header {
             position: fixed;
@@ -55,24 +83,27 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: var(--color-bg-dark);
-            padding: 1rem 2rem;
+            background: rgba(10, 13, 46, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            max-width: 1400px;
+            padding: 1rem 2rem;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
         .nav__logo a {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--color-text-light);
+            color: white;
             text-decoration: none;
-            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .nav__menu {
@@ -82,31 +113,33 @@
         }
 
         .nav__menu a {
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.9rem;
-            transition: color 0.3s var(--transition-smooth);
+            transition: all 0.3s ease;
         }
 
-        .nav__menu a:hover {
-            color: var(--color-accent);
+        .nav__menu a:hover,
+        .nav__menu a.active {
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 150, 50, 0.8);
         }
 
-        .nav__actions {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .nav__menu-btn {
+        .nav__toggle {
+            display: none;
+            flex-direction: column;
+            gap: 4px;
             background: none;
             border: none;
-            color: var(--color-text-light);
-            font-size: 0.9rem;
-            font-weight: 500;
             cursor: pointer;
-            font-family: inherit;
+            padding: 0.5rem;
+        }
+
+        .nav__toggle span {
+            width: 25px;
+            height: 2px;
+            background: white;
+            transition: all 0.3s ease;
         }
 
         /* ========================================
@@ -114,47 +147,44 @@
            ======================================== */
         .main {
             padding-top: 80px;
+            min-height: 100vh;
         }
 
         /* ========================================
            HERO SECTION
            ======================================== */
         .hero {
-            background: var(--color-bg-dark);
-            padding: 4rem 2rem 6rem;
-            color: var(--color-text-light);
-        }
-
-        .hero__content {
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 6rem 2rem 4rem;
+            text-align: center;
         }
 
         .hero__title {
-            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 800;
             letter-spacing: -0.03em;
             line-height: 1.1;
             margin-bottom: 1.5rem;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.4);
         }
 
         .hero__subtitle {
             font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 600px;
-            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 650px;
+            margin: 0 auto;
+            line-height: 1.8;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         /* ========================================
-           CARDS GRID
+           CARDS SECTION (Glassmorphismus)
            ======================================== */
         .cards-section {
-            padding: 4rem 2rem;
-            background: var(--color-bg-light);
+            padding: 2rem 2rem 6rem;
         }
 
         .cards-container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
 
@@ -162,7 +192,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
+            padding: 0 0.5rem;
         }
 
         .cards-header__title {
@@ -170,12 +201,12 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: rgba(0, 0, 0, 0.5);
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .cards-header__count {
             font-size: 0.85rem;
-            color: rgba(0, 0, 0, 0.5);
+            color: rgba(255, 255, 255, 0.5);
         }
 
         .cards-grid {
@@ -185,31 +216,55 @@
         }
 
         /* ========================================
-           CARD COMPONENT (P10 Style)
+           CARD COMPONENT (Glassmorphismus)
            ======================================== */
         .card {
             position: relative;
-            aspect-ratio: 3 / 4;
-            background: var(--color-accent);
-            border-radius: 0;
+            aspect-ratio: 4 / 5;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
             overflow: hidden;
             cursor: pointer;
-            transition: transform 0.4s var(--transition-smooth),
-                        box-shadow 0.4s var(--transition-smooth);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                135deg,
+                rgba(255, 150, 50, 0.0) 0%,
+                rgba(255, 150, 50, 0.1) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
 
         .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px);
+            box-shadow: 
+                0 30px 60px rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(255, 150, 50, 0.15);
+            border-color: rgba(255, 150, 50, 0.3);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .card:hover::before {
+            opacity: 1;
         }
 
         .card__content {
             position: absolute;
             inset: 0;
-            padding: 1.5rem;
+            padding: 1.75rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            z-index: 1;
         }
 
         .card__header {
@@ -219,43 +274,72 @@
         }
 
         .card__category {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--color-text-dark);
-            opacity: 0.7;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 0.35rem 0.75rem;
+            border-radius: 20px;
         }
 
         .card__number {
             font-size: 0.75rem;
             font-weight: 500;
-            color: var(--color-text-dark);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .card__icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5rem;
+            opacity: 0.15;
+            transition: all 0.4s ease;
+            filter: grayscale(100%);
+        }
+
+        .card:hover .card__icon {
+            opacity: 0.25;
+            transform: translate(-50%, -50%) scale(1.1);
+            filter: grayscale(0%);
         }
 
         .card__title {
-            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-size: 1.75rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: var(--color-text-dark);
+            color: white;
             line-height: 1.2;
-            transition: opacity 0.3s var(--transition-smooth);
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card__title {
+            text-shadow: 0 0 30px rgba(255, 150, 50, 0.5);
         }
 
         /* Hover Info Overlay */
         .card__overlay {
             position: absolute;
             inset: 0;
-            background: var(--color-accent);
-            padding: 1.5rem;
+            background: linear-gradient(
+                180deg,
+                rgba(10, 13, 46, 0.7) 0%,
+                rgba(10, 13, 46, 0.95) 100%
+            );
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            padding: 1.75rem;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
             opacity: 0;
             transform: translateY(20px);
-            transition: opacity 0.4s var(--transition-smooth),
-                        transform 0.4s var(--transition-smooth);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2;
         }
 
         .card:hover .card__overlay {
@@ -263,17 +347,12 @@
             transform: translateY(0);
         }
 
-        .card:hover .card__title {
-            opacity: 0;
-        }
-
         .card__overlay-category {
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--color-text-dark);
-            opacity: 0.6;
+            letter-spacing: 0.12em;
+            color: var(--color-primary);
             margin-bottom: 0.5rem;
         }
 
@@ -281,75 +360,61 @@
             font-size: 1.5rem;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: var(--color-text-dark);
+            color: white;
             margin-bottom: 1rem;
         }
 
         .card__overlay-description {
             font-size: 0.9rem;
-            line-height: 1.6;
-            color: var(--color-text-dark);
-            opacity: 0.8;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.8);
             margin-bottom: 1.5rem;
         }
 
         .card__overlay-meta {
             display: flex;
-            gap: 1.5rem;
+            gap: 2rem;
             padding-top: 1rem;
-            border-top: 1px solid rgba(0, 0, 0, 0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .card__overlay-meta-item {
             display: flex;
             flex-direction: column;
-            gap: 0.25rem;
+            gap: 0.3rem;
         }
 
         .card__overlay-meta-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.1em;
-            color: var(--color-text-dark);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .card__overlay-meta-value {
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--color-text-dark);
-        }
-
-        /* Card Icon */
-        .card__icon {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 4rem;
-            opacity: 0.15;
-            transition: opacity 0.3s var(--transition-smooth),
-                        transform 0.3s var(--transition-smooth);
-        }
-
-        .card:hover .card__icon {
-            opacity: 0;
-            transform: translate(-50%, -50%) scale(0.8);
+            color: white;
         }
 
         /* ========================================
-           FOOTER
+           FOOTER (Glassmorphismus)
            ======================================== */
         .footer {
-            background: var(--color-bg-dark);
-            color: var(--color-text-light);
-            padding: 3rem 2rem;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 1.5rem 0;
+            text-align: center;
         }
 
         .footer__content {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
+            padding: 0 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -361,14 +426,14 @@
         }
 
         .footer__link {
-            color: var(--color-accent);
+            color: var(--color-primary);
             text-decoration: none;
             font-weight: 500;
-            transition: opacity 0.3s var(--transition-smooth);
+            transition: all 0.3s ease;
         }
 
         .footer__link:hover {
-            opacity: 0.8;
+            text-shadow: 0 0 20px rgba(255, 150, 50, 0.8);
         }
 
         /* ========================================
@@ -377,6 +442,10 @@
         @media (max-width: 768px) {
             .nav__menu {
                 display: none;
+            }
+
+            .nav__toggle {
+                display: flex;
             }
 
             .cards-grid {
@@ -390,7 +459,6 @@
             .footer__content {
                 flex-direction: column;
                 gap: 1rem;
-                text-align: center;
             }
         }
 
@@ -406,7 +474,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(30px);
+                transform: translateY(40px);
             }
             to {
                 opacity: 1;
@@ -415,7 +483,7 @@
         }
 
         .card {
-            animation: fadeInUp 0.6s var(--transition-smooth) backwards;
+            animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
         }
 
         .card:nth-child(1) { animation-delay: 0.1s; }
@@ -427,6 +495,9 @@
     </style>
 </head>
 <body>
+    <!-- WebGL Wave Background Canvas -->
+    <canvas id="waveCanvas" aria-hidden="true"></canvas>
+
     <!-- Header -->
     <header class="header">
         <nav class="nav">
@@ -436,13 +507,15 @@
             <ul class="nav__menu">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="index.html#about">Über uns</a></li>
-                <li><a href="chatbots.html" style="color: var(--color-accent);">KI-Assistenten</a></li>
+                <li><a href="chatbots.html" class="active">KI-Assistenten</a></li>
                 <li><a href="index.html#services">Services</a></li>
                 <li><a href="index.html#contact">Kontakt</a></li>
             </ul>
-            <div class="nav__actions">
-                <button class="nav__menu-btn">Menü</button>
-            </div>
+            <button class="nav__toggle" id="navToggle" aria-label="Menü öffnen">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </nav>
     </header>
 
@@ -450,14 +523,12 @@
     <main class="main">
         <!-- Hero Section -->
         <section class="hero">
-            <div class="hero__content">
-                <h1 class="hero__title">KI-Assistenten &<br>Lernbegleiter</h1>
-                <p class="hero__subtitle">
-                    Entdecken Sie unsere Sammlung intelligenter Chatbots und Simulationen. 
-                    Jeder Assistent wurde entwickelt, um Sie in verschiedenen Bereichen zu unterstützen – 
-                    von persönlichem Wachstum bis hin zu professioneller Entwicklung.
-                </p>
-            </div>
+            <h1 class="hero__title">KI-Assistenten &<br>Lernbegleiter</h1>
+            <p class="hero__subtitle">
+                Entdecken Sie unsere Sammlung intelligenter Chatbots und Simulationen. 
+                Jeder Assistent wurde entwickelt, um Sie in verschiedenen Bereichen zu unterstützen – 
+                von persönlichem Wachstum bis hin zu professioneller Entwicklung.
+            </p>
         </section>
 
         <!-- Cards Section -->
@@ -660,6 +731,339 @@
             <a href="index.html" class="footer__link">← Zurück zur Startseite</a>
         </div>
     </footer>
+
+    <!-- ========================================
+         WEBGL WAVE BACKGROUND SHADER
+         (Identisch mit index.html)
+         ======================================== -->
+    <script>
+    (function() {
+        'use strict';
+
+        // Vertex Shader
+        const VERTEX_SHADER = `
+            attribute vec2 a_position;
+            void main() {
+                gl_Position = vec4(a_position, 0.0, 1.0);
+            }
+        `;
+
+        // Fragment Shader - Dark Water with Mouse Shimmer
+        const FRAGMENT_SHADER = `
+            precision highp float;
+            
+            uniform vec2 u_resolution;
+            uniform float u_time;
+            uniform vec2 u_pointer;
+            uniform float u_pointerInfluence;
+            
+            // Water colors - deep blue ocean
+            const vec3 WATER_DEEP = vec3(0.02, 0.05, 0.15);
+            const vec3 WATER_MID = vec3(0.04, 0.10, 0.25);
+            const vec3 WATER_RIM = vec3(0.08, 0.18, 0.35);
+            
+            // Hash function for noise
+            float hash(vec2 p) {
+                vec3 p3 = fract(vec3(p.xyx) * 0.1031);
+                p3 += dot(p3, p3.yzx + 33.33);
+                return fract((p3.x + p3.y) * p3.z);
+            }
+            
+            // 2D Value Noise
+            float noise(vec2 p) {
+                vec2 i = floor(p);
+                vec2 f = fract(p);
+                vec2 u = f * f * f * (f * (f * 6.0 - 15.0) + 10.0);
+                
+                float a = hash(i);
+                float b = hash(i + vec2(1.0, 0.0));
+                float c = hash(i + vec2(0.0, 1.0));
+                float d = hash(i + vec2(1.0, 1.0));
+                
+                return mix(mix(a, b, u.x), mix(c, d, u.x), u.y);
+            }
+            
+            // Domain Warping
+            vec2 domainWarp(vec2 p, float time) {
+                float warpStrength = 0.35;
+                float warpFreq = 0.9;
+                
+                float wx = noise(p * warpFreq + time * 0.1);
+                float wy = noise(p * warpFreq + vec2(5.2, 1.3) + time * 0.1);
+                
+                return p + vec2(wx, wy) * warpStrength;
+            }
+            
+            // FBM with 5 octaves
+            float fbm(vec2 p, float time) {
+                float value = 0.0;
+                float amplitude = 0.5;
+                float frequency = 1.35;
+                float lacunarity = 2.05;
+                float gain = 0.55;
+                
+                p = domainWarp(p, time);
+                
+                for (int i = 0; i < 5; i++) {
+                    vec2 dir = vec2(0.85, 0.25);
+                    vec2 animatedP = p + dir * time * 0.12 * float(i + 1) * 0.3;
+                    value += amplitude * noise(animatedP * frequency);
+                    frequency *= lacunarity;
+                    amplitude *= gain;
+                }
+                
+                value = pow(abs(value), 1.25);
+                return value;
+            }
+            
+            // Secondary swell
+            float secondarySwell(vec2 p, float time) {
+                vec2 dir = vec2(-0.2, 0.95);
+                float speed = 0.06;
+                float amplitude = 0.35;
+                vec2 animatedP = p + dir * time * speed;
+                return noise(animatedP * 2.0) * amplitude;
+            }
+
+            float getWaveHeight(vec2 uv, float time) {
+                float height = fbm(uv * 3.0, time);
+                height += secondarySwell(uv * 2.0, time);
+                return height;
+            }
+            
+            vec3 calcNormal(vec2 uv, float time) {
+                float eps = 0.0025;
+                float hL = getWaveHeight(uv - vec2(eps, 0.0), time);
+                float hR = getWaveHeight(uv + vec2(eps, 0.0), time);
+                float hD = getWaveHeight(uv - vec2(0.0, eps), time);
+                float hU = getWaveHeight(uv + vec2(0.0, eps), time);
+                
+                float normalStrength = 1.35;
+                vec3 normal = normalize(vec3(
+                    (hL - hR) * normalStrength,
+                    (hD - hU) * normalStrength,
+                    1.0
+                ));
+                return normal;
+            }
+
+            float fresnel(vec3 viewDir, vec3 normal, float power) {
+                return pow(1.0 - max(dot(viewDir, normal), 0.0), power);
+            }
+
+            float vignette(vec2 uv, float strength, float radius) {
+                float dist = length(uv - 0.5);
+                return 1.0 - smoothstep(radius, radius + 0.5, dist) * strength;
+            }
+            
+            float filmGrain(vec2 uv, float time) {
+                return (hash(uv * 1000.0 + time * 100.0) - 0.5) * 2.0;
+            }
+            
+            vec3 cheapBloom(vec3 color, float threshold, float intensity) {
+                float brightness = dot(color, vec3(0.2126, 0.7152, 0.0722));
+                float bloom = max(0.0, brightness - threshold);
+                return color + color * bloom * intensity;
+            }
+
+            void main() {
+                vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+                float aspect = u_resolution.x / u_resolution.y;
+                vec2 uvAspect = vec2(uv.x * aspect, uv.y);
+                
+                vec2 pointer = u_pointer / u_resolution.xy;
+                pointer.x *= aspect;
+                
+                float time = u_time;
+                
+                float perspective = pow(1.0 - uv.y, 0.8);
+                vec2 waterUV = uvAspect * (1.0 + perspective * 1.5);
+                
+                float waveHeight = getWaveHeight(waterUV, time);
+                vec3 normal = calcNormal(waterUV, time);
+                vec3 viewDir = normalize(vec3(0.0, 0.0, 1.0));
+                
+                vec3 waterColor = mix(WATER_DEEP, WATER_MID, uv.y * 0.8);
+                waterColor = mix(waterColor, WATER_RIM, waveHeight * 0.4);
+                
+                float fres = fresnel(viewDir, normal, 5.0) * 0.3;
+                waterColor = mix(waterColor, WATER_RIM * 1.2, fres);
+                
+                // Pointer shimmer
+                float pointerDist = length(uvAspect - pointer);
+                float pointerInfluence = smoothstep(0.45, 0.0, pointerDist) * u_pointerInfluence;
+                
+                float shimmerBoost = 1.0 + pointerInfluence * 0.6;
+                float flicker = 1.0 + sin(time * 4.0 + waveHeight * 15.0) * 0.05 * pointerInfluence;
+                float sparkle = smoothstep(0.6, 0.9, waveHeight) * pointerInfluence * 0.4;
+                
+                vec3 shimmerColor = vec3(0.95, 0.75, 0.45);
+                vec3 sparkleColor = vec3(1.0, 0.85, 0.6);
+                
+                float waveCrests = smoothstep(0.35, 0.75, waveHeight);
+                waterColor += shimmerColor * waveCrests * pointerInfluence * shimmerBoost * flicker * 0.15;
+                waterColor += sparkleColor * sparkle * flicker * 0.25;
+                
+                float outerGlow = smoothstep(0.6, 0.15, pointerDist) * u_pointerInfluence * 0.06;
+                waterColor += shimmerColor * outerGlow * 0.5;
+                
+                vec3 finalColor = waterColor;
+                
+                // Post processing
+                float vig = vignette(uv, 0.25, 0.75);
+                finalColor *= vig;
+                
+                float grain = filmGrain(uv, time) * 0.015;
+                finalColor += grain;
+                
+                finalColor = cheapBloom(finalColor, 0.6, 0.15);
+                finalColor = min(finalColor, vec3(0.85));
+                
+                gl_FragColor = vec4(finalColor, 1.0);
+            }
+        `;
+
+        const canvas = document.getElementById('waveCanvas');
+        if (!canvas) return;
+        
+        let gl = canvas.getContext('webgl2');
+        let isWebGL2 = true;
+        
+        if (!gl) {
+            gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            isWebGL2 = false;
+        }
+        
+        if (!gl) {
+            canvas.style.display = 'none';
+            const fallback = document.createElement('div');
+            fallback.className = 'wave-fallback';
+            document.body.insertBefore(fallback, document.body.firstChild);
+            return;
+        }
+
+        function compileShader(source, type) {
+            const shader = gl.createShader(type);
+            gl.shaderSource(shader, source);
+            gl.compileShader(shader);
+            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+                console.error('Shader error:', gl.getShaderInfoLog(shader));
+                gl.deleteShader(shader);
+                return null;
+            }
+            return shader;
+        }
+
+        const vertexShader = compileShader(VERTEX_SHADER, gl.VERTEX_SHADER);
+        const fragmentShader = compileShader(FRAGMENT_SHADER, gl.FRAGMENT_SHADER);
+        
+        if (!vertexShader || !fragmentShader) return;
+
+        const program = gl.createProgram();
+        gl.attachShader(program, vertexShader);
+        gl.attachShader(program, fragmentShader);
+        gl.linkProgram(program);
+
+        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+            console.error('Program link error:', gl.getProgramInfoLog(program));
+            return;
+        }
+
+        gl.useProgram(program);
+
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+            -1, -1,  1, -1,  -1, 1,
+            -1,  1,  1, -1,   1, 1
+        ]), gl.STATIC_DRAW);
+
+        const positionLoc = gl.getAttribLocation(program, 'a_position');
+        gl.enableVertexAttribArray(positionLoc);
+        gl.vertexAttribPointer(positionLoc, 2, gl.FLOAT, false, 0, 0);
+
+        const uniforms = {
+            resolution: gl.getUniformLocation(program, 'u_resolution'),
+            time: gl.getUniformLocation(program, 'u_time'),
+            pointer: gl.getUniformLocation(program, 'u_pointer'),
+            pointerInfluence: gl.getUniformLocation(program, 'u_pointerInfluence')
+        };
+
+        let width = 0, height = 0;
+        let pointerX = 0, pointerY = 0;
+        let targetPointerX = 0, targetPointerY = 0;
+        let isRunning = true;
+        let reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        function resize() {
+            const dpr = Math.min(window.devicePixelRatio || 1, 2);
+            width = window.innerWidth;
+            height = window.innerHeight;
+            
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            canvas.style.width = width + 'px';
+            canvas.style.height = height + 'px';
+            
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.uniform2f(uniforms.resolution, canvas.width, canvas.height);
+            
+            if (pointerX === 0 && pointerY === 0) {
+                pointerX = targetPointerX = width * 0.5;
+                pointerY = targetPointerY = height * 0.5;
+            }
+        }
+
+        function onPointerMove(e) {
+            targetPointerX = e.clientX || (e.touches && e.touches[0].clientX) || targetPointerX;
+            targetPointerY = e.clientY || (e.touches && e.touches[0].clientY) || targetPointerY;
+        }
+
+        window.addEventListener('resize', resize);
+        window.addEventListener('mousemove', onPointerMove);
+        window.addEventListener('touchmove', onPointerMove, { passive: true });
+        window.addEventListener('touchstart', onPointerMove, { passive: true });
+
+        document.addEventListener('visibilitychange', () => {
+            isRunning = !document.hidden;
+            if (isRunning) requestAnimationFrame(render);
+        });
+
+        resize();
+
+        function render(timestamp) {
+            if (!isRunning) return;
+            
+            const timeSpeed = reducedMotion ? 0.35 : 1.0;
+            const time = timestamp * 0.001 * timeSpeed;
+            
+            const smoothing = reducedMotion ? 0.05 : 0.12;
+            pointerX += (targetPointerX - pointerX) * smoothing;
+            pointerY += (targetPointerY - pointerY) * smoothing;
+            
+            gl.uniform1f(uniforms.time, time);
+            gl.uniform2f(uniforms.pointer, pointerX * (canvas.width / width), 
+                        (height - pointerY) * (canvas.height / height));
+            gl.uniform1f(uniforms.pointerInfluence, reducedMotion ? 0.5 : 1.0);
+            
+            gl.drawArrays(gl.TRIANGLES, 0, 6);
+            requestAnimationFrame(render);
+        }
+
+        requestAnimationFrame(render);
+    })();
+
+    // Navigation Toggle
+    (function() {
+        const toggle = document.getElementById('navToggle');
+        const menu = document.querySelector('.nav__menu');
+        
+        if (toggle && menu) {
+            toggle.addEventListener('click', () => {
+                menu.classList.toggle('active');
+            });
+        }
+    })();
+    </script>
 </body>
 </html>
-
